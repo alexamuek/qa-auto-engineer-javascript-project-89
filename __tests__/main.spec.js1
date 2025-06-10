@@ -52,11 +52,13 @@ test('positive test - close dialog', async () => {
     expect(closeButton).toBeVisible()
   })
   await user.click(closeButton)
+  await new Promise(resolve => setTimeout(resolve, 3000));
   const buttons = await screen.queryAllByText(welcomeObj.buttons[0].text)
+  //debug()
   await waitFor(() => {
     expect(buttons).toHaveLength(0)
   })
-  // screen.debug() 
+  //screen.debug() 
 })
 
 test('positive test - several steps', async () => {
@@ -128,10 +130,12 @@ test('positive test - scroll', async () => {
   const modalBody = div2.nextElementSibling
   // expect(div3).toHaveClass('modal-body');
   // make scroll
+  //const scrollDialogMock = vi.fn()
+  //modalBody.scrollIntoView = scrollDialogMock
   fireEvent.scroll(modalBody, { target: { scrollTop:  100} });
   await waitFor(() => {
     expect(modalBody.scrollTop).toBe(100)
   })
-  //debug();
+  // debug();
   //screen.debug(undefined, { maxDepth: 10, maxLength: 10000 }) 
 })
