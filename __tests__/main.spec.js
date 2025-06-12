@@ -139,3 +139,5 @@ test('positive test - scroll', async () => {
   // debug();
   //screen.debug(undefined, { maxDepth: 10, maxLength: 10000 }) 
 })
+
+// проверить, что когда навожу курсор, цвет меняется!!!
