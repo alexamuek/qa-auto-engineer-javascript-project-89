@@ -27,8 +27,9 @@ const checkVisible = async (el) => {
 beforeEach(async () => {
   window.HTMLElement.prototype.scrollIntoView = scrollIntoViewMock // mock
   container = render(Widget(steps))
-  user = userEvent.setup()
+  //user = userEvent.setup()
   startPage = new StartPage()
+  user = userEvent.setup()
   await startPage.openWidget(screen, user, widgetButtonName)
 })
 
@@ -40,7 +41,7 @@ test('positive test - initialize', async () => {
   const [step0, ] = steps.filter((item) => item.id == 'welcome')
   const dialog = await screen.findByRole('dialog')
   //debug()
-  /*await checkVisible(dialog)
+  await checkVisible(dialog)
   step0.messages.forEach(async (item) => {
     await waitFor (() => {
       expect(document.body).toHaveTextContent(item)
@@ -49,18 +50,20 @@ test('positive test - initialize', async () => {
   step0.buttons.forEach(async (button) => {
     const el = await startPage.findButton(screen, button.text)
     await checkVisible(el)
-  })*/
+  })
   // debug()
   // screen.debug()  
 })
 
 test('positive test - close dialog', async () => {
   const [step0, ] = steps.filter((item) => item.id == 'welcome')
-  await startPage.closeWidget(screen, user, closeButtonName)
-  await new Promise(resolve => setTimeout(resolve, 3000));
+  const button = await screen.findByRole('button', {name: closeButtonName})
+  await user.click(button);
+  //await startPage.closeWidget(screen, user, closeButtonName)
+  //await new Promise(resolve => setTimeout(resolve, 1000));
   debug()
-  const buttons = await screen.queryAllByText(step0.buttons[0].text)
-  console.log(buttons)
+  //const buttons = await screen.queryAllByText(step0.buttons[0].text)
+  //console.log(buttons)
   //debug()
   /*await waitFor(() => {
     expect(buttons).toHaveLength(0)
