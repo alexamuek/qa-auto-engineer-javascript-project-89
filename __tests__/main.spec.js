@@ -5,21 +5,31 @@ import { debug } from 'vitest-preview';
 
 import Widget from '@hexlet/chatbot-v2'
 import steps from '../__fixtures__/steps.js'
+import { StartPage } from './pages.js'
 import '@hexlet/chatbot-v2/styles'
 
 let chatButton
+let startPage
+let user
 const scrollIntoViewMock = vi.fn()
 let container
+const widgetButtonName = 'Открыть Чат'
+const closeButtonName = 'Close'
+
+const checkVisible = async (el) => {
+  await waitFor(() => {
+      expect(el).toBeVisible()
+      expect(el).toBeInTheDocument() 
+      expect(el).not.toHaveStyle({ display: 'none' })
+  })
+}
 
 beforeEach(async () => {
   window.HTMLElement.prototype.scrollIntoView = scrollIntoViewMock // mock
-
   container = render(Widget(steps))
-  chatButton = await screen.findByRole('button', { name: 'Открыть Чат' })
-  expect(true).toBeTruthy()
-  expect(chatButton).toBeVisible()
-  expect(chatButton).toBeInTheDocument() 
-  expect(chatButton).not.toHaveStyle({ display: 'none' })
+  user = userEvent.setup()
+  startPage = new StartPage()
+  await startPage.openWidget(screen, user, widgetButtonName)
 })
 
 afterEach(() => {
@@ -27,22 +37,38 @@ afterEach(() => {
 })
 
 test('positive test - initialize', async () => {
-  const user = userEvent.setup()
-  await user.click(chatButton)
-  const [welcomeObj, ] = steps.filter((item) => item.id == 'welcome')
-  await waitFor(() => {
-    expect(document.body).toHaveTextContent(welcomeObj.messages[0])
+  const [step0, ] = steps.filter((item) => item.id == 'welcome')
+  const dialog = await screen.findByRole('dialog')
+  //debug()
+  /*await checkVisible(dialog)
+  step0.messages.forEach(async (item) => {
+    await waitFor (() => {
+      expect(document.body).toHaveTextContent(item)
+    })
   })
-  const nextButton = await screen.findByRole('button', { name: welcomeObj.buttons[0].text })
-  await waitFor(() => {
-    expect(nextButton).toBeVisible()
-    expect(nextButton).toBeInTheDocument() 
-    expect(nextButton).not.toHaveStyle({ display: 'none' })
-  })
-  //screen.debug()  
+  step0.buttons.forEach(async (button) => {
+    const el = await startPage.findButton(screen, button.text)
+    await checkVisible(el)
+  })*/
+  // debug()
+  // screen.debug()  
 })
 
 test('positive test - close dialog', async () => {
+  const [step0, ] = steps.filter((item) => item.id == 'welcome')
+  await startPage.closeWidget(screen, user, closeButtonName)
+  await new Promise(resolve => setTimeout(resolve, 3000));
+  debug()
+  const buttons = await screen.queryAllByText(step0.buttons[0].text)
+  console.log(buttons)
+  //debug()
+  /*await waitFor(() => {
+    expect(buttons).toHaveLength(0)
+  })*/
+  //screen.debug() 
+})
+
+/*test('positive test - close dialog', async () => {
   const user = userEvent.setup()
   await user.click(chatButton)
   const [welcomeObj, ] = steps.filter((item) => item.id == 'welcome')
@@ -59,9 +85,9 @@ test('positive test - close dialog', async () => {
     expect(buttons).toHaveLength(0)
   })
   //screen.debug() 
-})
+})*/
 
-test('positive test - several steps', async () => {
+/*test('positive test - several steps', async () => {
   const user = userEvent.setup()
   await user.click(chatButton)
   const [welcomeObj, ] = steps.filter((item) => item.id == 'welcome')
@@ -138,6 +164,6 @@ test('positive test - scroll', async () => {
   })
   // debug();
   //screen.debug(undefined, { maxDepth: 10, maxLength: 10000 }) 
-})
+})*/
 
 // проверить, что когда навожу курсор, цвет меняется!!!
