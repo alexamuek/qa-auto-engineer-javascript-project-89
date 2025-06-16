@@ -1,4 +1,4 @@
-import { render, screen, waitFor, fireEvent } from '@testing-library/react'
+import { render, screen, waitFor, fireEvent, cleanup } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { test, expect, beforeEach, afterEach, vi } from "vitest"
 import { debug } from 'vitest-preview';
@@ -8,11 +8,7 @@ import steps from '../__fixtures__/steps.js'
 import { StartPage } from './pages.js'
 import '@hexlet/chatbot-v2/styles'
 
-let chatButton
-let startPage
-let user
 const scrollIntoViewMock = vi.fn()
-let container
 const widgetButtonName = 'Открыть Чат'
 const closeButtonName = 'Close'
 
@@ -26,21 +22,19 @@ const checkVisible = async (el) => {
 
 beforeEach(async () => {
   window.HTMLElement.prototype.scrollIntoView = scrollIntoViewMock // mock
-  container = render(Widget(steps))
-  //user = userEvent.setup()
-  startPage = new StartPage()
-  user = userEvent.setup()
-  await startPage.openWidget(screen, user, widgetButtonName)
 })
 
 afterEach(() => {
-  document.body.innerHTML = '' // clear body force
+  cleanup();
 })
 
 test('positive test - initialize', async () => {
+  const container = render(Widget(steps))
+  const user = userEvent.setup()
+  const startPage = new StartPage()
+  await startPage.openWidget(screen, user, widgetButtonName)
   const [step0, ] = steps.filter((item) => item.id == 'welcome')
   const dialog = await screen.findByRole('dialog')
-  //debug()
   await checkVisible(dialog)
   step0.messages.forEach(async (item) => {
     await waitFor (() => {
@@ -48,6 +42,7 @@ test('positive test - initialize', async () => {
     })
   })
   step0.buttons.forEach(async (button) => {
+    console.log('button.text = ', button.text)
     const el = await startPage.findButton(screen, button.text)
     await checkVisible(el)
   })
@@ -56,39 +51,20 @@ test('positive test - initialize', async () => {
 })
 
 test('positive test - close dialog', async () => {
+  const container = render(Widget(steps))
+  const user = userEvent.setup()
+  const startPage = new StartPage()
+  await startPage.openWidget(screen, user, widgetButtonName)
   const [step0, ] = steps.filter((item) => item.id == 'welcome')
-  const button = await screen.findByRole('button', {name: closeButtonName})
-  await user.click(button);
-  //await startPage.closeWidget(screen, user, closeButtonName)
-  //await new Promise(resolve => setTimeout(resolve, 1000));
-  debug()
-  //const buttons = await screen.queryAllByText(step0.buttons[0].text)
-  //console.log(buttons)
+  await startPage.closeWidget(screen, user, closeButtonName)
+  //await new Promise(resolve => setTimeout(resolve, 3000));
+  const buttons = await screen.queryAllByText(step0.buttons[0].text)
   //debug()
-  /*await waitFor(() => {
+  await waitFor(() => {
     expect(buttons).toHaveLength(0)
-  })*/
+  })
   //screen.debug() 
 })
-
-/*test('positive test - close dialog', async () => {
-  const user = userEvent.setup()
-  await user.click(chatButton)
-  const [welcomeObj, ] = steps.filter((item) => item.id == 'welcome')
-  const nextButton = await screen.findByRole('button', { name: welcomeObj.buttons[0].text })
-  const closeButton = await screen.findByRole('button', { name: 'Close' })
-  await waitFor(() => {
-    expect(closeButton).toBeVisible()
-  })
-  await user.click(closeButton)
-  await new Promise(resolve => setTimeout(resolve, 3000));
-  const buttons = await screen.queryAllByText(welcomeObj.buttons[0].text)
-  //debug()
-  await waitFor(() => {
-    expect(buttons).toHaveLength(0)
-  })
-  //screen.debug() 
-})*/
 
 /*test('positive test - several steps', async () => {
   const user = userEvent.setup()
