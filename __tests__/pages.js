@@ -16,6 +16,11 @@ export class StartPage {
     return button
   }
 
+  async clickButton(screen, user, label) {
+    const button = await this.findButton(screen, label)  
+    await user.click(button);
+  }
+
   async openWidget(screen, user, widgetButtonName) {
     const button = await screen.findByRole('button', {name: widgetButtonName})
     await user.click(button);
