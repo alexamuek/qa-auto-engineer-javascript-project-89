@@ -1,6 +1,6 @@
 // empty array of messages
 // empty array of buttons
-const steps = [
+const Steps2 = [
   {
     id: 'welcome',
     messages: [],
@@ -21,4 +21,4 @@ const steps = [
   },
 ]
 
-export default steps
+export default Steps2

@@ -1,5 +1,5 @@
 // link to non-existed step Start
-const steps3 = [
+const Steps3 = [
   {
     id: 'welcome',
     messages: [
@@ -121,4 +121,4 @@ const steps3 = [
   },
 ]
 
-export default steps3
+export default Steps3

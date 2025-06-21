@@ -1,5 +1,5 @@
 // wrong type of button
-const steps8 = [
+const Steps8 = [
   {
     id: 'welcome',
     messages: [
@@ -38,4 +38,4 @@ const steps8 = [
   },
 ]
 
-export default steps8
+export default Steps8

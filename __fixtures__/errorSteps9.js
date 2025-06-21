@@ -1,5 +1,5 @@
 // next step doesn't have id
-const steps9 = [
+const Steps9 = [
   {
     id: 'welcome',
     messages: [
@@ -13,7 +13,7 @@ const steps9 = [
       },
     ],
   },
-  {
+  { // empty is here
     messages: [
       'Помогу вам выбрать подходящий курс. Выбирайте категорию вопроса, и буквально через пару шагов я смогу рассказать вам то, что нужно.',
     ],
@@ -37,4 +37,4 @@ const steps9 = [
   },
 ]
 
-export default steps9
+export default Steps9

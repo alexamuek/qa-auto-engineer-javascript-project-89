@@ -1,5 +1,5 @@
 // button object doesn't have nextStepId property
-const steps6 = [
+const Steps6 = [
   {
     id: 'welcome',
     messages: [
@@ -38,4 +38,4 @@ const steps6 = [
   },
 ]
 
-export default steps6
+export default Steps6

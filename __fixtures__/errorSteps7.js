@@ -1,5 +1,5 @@
 // button object doesn't have Type property
-const steps7 = [
+const Steps7 = [
   {
     id: 'welcome',
     messages: [
@@ -37,4 +37,4 @@ const steps7 = [
   },
 ]
 
-export default steps7
+export default Steps7

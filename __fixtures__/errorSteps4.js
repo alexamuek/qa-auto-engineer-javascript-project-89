@@ -1,5 +1,5 @@
-// link to itself
-const steps = [
+// nextStepId links to itself
+const Steps4 = [
   {
     id: 'welcome',
     messages: [
@@ -15,4 +15,4 @@ const steps = [
   },
 ]
 
-export default steps
+export default Steps4

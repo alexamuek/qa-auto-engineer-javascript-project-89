@@ -1,5 +1,5 @@
 // button object doesn't have text property
-const steps5 = [
+const Steps5 = [
   {
     id: 'welcome',
     messages: [
@@ -37,4 +37,4 @@ const steps5 = [
   },
 ]
 
-export default steps5
+export default Steps5

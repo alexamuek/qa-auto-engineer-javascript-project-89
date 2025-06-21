@@ -1,33 +1,64 @@
 import js from '@eslint/js'
 import globals from 'globals'
-import reactHooks from 'eslint-plugin-react-hooks'
-import reactRefresh from 'eslint-plugin-react-refresh'
+import pluginReact from 'eslint-plugin-react'
+import { defineConfig } from 'eslint/config'
+import stylistic from '@stylistic/eslint-plugin'
+import pluginVitest from 'eslint-plugin-vitest'
 
-export default [
-  { ignores: ['dist'] },
-  {
-    files: ['**/*.{js,jsx}'],
+export default defineConfig([
+  stylistic.configs.recommended,
+  { files: ['src/*.{js,jsx}'],
     languageOptions: {
-      ecmaVersion: 2020,
-      globals: globals.browser,
+      globals: {
+        ...globals.browser,
+        React: 'readonly',
+      },
       parserOptions: {
-        ecmaVersion: 'latest',
-        ecmaFeatures: { jsx: true },
-        sourceType: 'module',
+        ecmaFeatures: {
+          jsx: true,
+        },
+      },
+    },
+    plugins: { 'react': pluginReact,
+      '@stylistic': stylistic },
+    rules: {
+      ...js.configs.recommended.rules,
+      ...pluginReact.configs.recommended.rules,
+      ...stylistic.configs.customize({
+        indent: 2,
+        quotes: 'single',
+        semi: true,
+      }).rules,
+      'react/react-in-jsx-scope': 'off',
+      'react/jsx-uses-react': 'error',
+      'react/jsx-uses-vars': 'error',
+    },
+  },
+  {
+    files: ['__tests__/*.{spec,test}.{js,jsx}'],
+    languageOptions: {
+      globals: {
+        ...globals.jest,
+        ...globals.node,
+        window: 'readonly',
+        document: 'readonly',
+        ...pluginVitest.environments.env.globals,
       },
     },
     plugins: {
-      'react-hooks': reactHooks,
-      'react-refresh': reactRefresh,
+      vitest: pluginVitest,
     },
     rules: {
-      ...js.configs.recommended.rules,
-      ...reactHooks.configs.recommended.rules,
-      'no-unused-vars': ['error', { varsIgnorePattern: '^[A-Z_]' }],
-      'react-refresh/only-export-components': [
-        'warn',
-        { allowConstantExport: true },
-      ],
+      'no-unused-vars': 'off',
+      'no-undef': 'off',
+      'react/react-in-jsx-scope': 'off',
     },
   },
-]
+  pluginReact.configs.flat.recommended,
+  { settings: {
+    react: {
+      version: 'detect',
+    },
+  },
+  },
+])

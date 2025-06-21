@@ -1,6 +1,6 @@
 // step doesn't have message
 // step doesn't have buttons
-const steps1 = [
+const Steps1 = [
   {
     id: 'welcome',
     buttons: [
@@ -19,4 +19,4 @@ const steps1 = [
   },
 ]
 
-export default steps1
+export default Steps1
