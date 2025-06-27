@@ -3,7 +3,6 @@ import userEvent from '@testing-library/user-event'
 import { test, expect, beforeEach, afterEach, vi } from 'vitest'
 import { debug } from 'vitest-preview'
 // import App from '../src/forTest.jsx'
-import React from 'react'
 
 import Widget from '@hexlet/chatbot-v2'
 // import '@hexlet/chatbot-v2/styles'
