@@ -1,7 +1,9 @@
 import { render, screen, waitFor, fireEvent, cleanup } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { test, expect, beforeEach, afterEach, vi } from 'vitest'
-// import { debug } from 'vitest-preview'
+import { debug } from 'vitest-preview'
+// import App from '../src/forTest.jsx'
+import React from 'react'
 
 import Widget from '@hexlet/chatbot-v2'
 // import '@hexlet/chatbot-v2/styles'
@@ -35,6 +37,7 @@ test('positive test - initialize', async () => {
   await checkMessagesOfStep(step0)
   // check: after clicking elements appeared with role Button
   await checkButtonsOfStep(step0, widget)
+  debug()
 })
 
 test('positive test - close dialog', async () => {
