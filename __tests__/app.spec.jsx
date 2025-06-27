@@ -8,8 +8,6 @@ import steps from '../__fixtures__/steps.js'
 import { InputForm, ResultPage } from './pages.js'
 import { checkVisible, checkButtonsOfStep, checkMessagesOfStep } from './helpers.js'
 
-// let chatButton
-// let container
 const scrollIntoViewMock = vi.fn()
 const widgetButtonName = 'Открыть Чат'
 const closeButtonName = 'Close'
