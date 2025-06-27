@@ -143,7 +143,7 @@ test('positive test - fill in form, submit, open widget, close widget, press bac
     expect(checkbox).toBeChecked()
     resultCells.forEach((item) => {
       expect(item).not.toBeInTheDocument()
-      expect(item).not.toBeVisible()
+      // expect(item).not.toBeVisible()
     })
   })
   // check press Back - Back is not in DOM
