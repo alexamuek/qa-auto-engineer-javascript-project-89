@@ -100,10 +100,6 @@ test('positive test - scroll', async () => {
   const div1 = await screen.findByText('Виртуальный помощник')
   const div2 = div1.parentElement
   const modalBody = div2.nextElementSibling
-  // expect(div3).toHaveClass('modal-body');
-  // make scroll
-  // const scrollDialogMock = vi.fn()
-  // modalBody.scrollIntoView = scrollDialogMock
   fireEvent.scroll(modalBody, { target: { scrollTop: 100 } })
   await waitFor(() => {
     expect(modalBody.scrollTop).toBe(100)
@@ -121,7 +117,6 @@ test('positive test - focus on button', async () => {
   const startButton = await widget.findButton(screen, step0.buttons[0].text)
   const mockHover = vi.fn()
   startButton.onmouseenter = mockHover
-  // fireEvent.mouseOver(startButton)
   await user.hover(startButton)
   await waitFor(() => {
     expect(mockHover).toHaveBeenCalledTimes(1)

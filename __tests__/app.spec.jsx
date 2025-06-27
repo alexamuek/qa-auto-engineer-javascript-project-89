@@ -22,12 +22,6 @@ const country = 'Россия'
 
 beforeEach(async () => {
   window.HTMLElement.prototype.scrollIntoView = scrollIntoViewMock // mock
-
-  // chatButton = await screen.findByRole('button', { name: 'Открыть Чат' })
-  /* expect(true).toBeTruthy()
-  expect(chatButton).toBeVisible()
-  expect(chatButton).toBeInTheDocument()
-  expect(chatButton).not.toHaveStyle({ display: 'none' }) */
 })
 
 afterEach(() => {
@@ -37,10 +31,8 @@ afterEach(() => {
 test('positive test - fill in form, open widget, close widget', async () => {
   // init - start
   const container = render(<App />)
-  // const container = render(App())
   const user = userEvent.setup()
   const form = new InputForm()
-  // await widget.openWidget(screen, user, widgetButtonName)
   // init - finish
   // find elements and fill in
   const emailInput = await form.fillInFieldWithPlaceholder(screen, user, 'Email', email)
@@ -86,7 +78,6 @@ test('positive test - fill in form, open widget, close widget', async () => {
 test('positive test - fill in form, submit, open widget, close widget, press back', async () => {
   // init - start
   const container = render(<App />)
-  // const container = render(App())
   const user = userEvent.setup()
   const form = new InputForm()
   // init - finish
