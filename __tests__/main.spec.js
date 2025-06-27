@@ -4,7 +4,7 @@ import { test, expect, beforeEach, afterEach, vi } from 'vitest'
 // import { debug } from 'vitest-preview'
 
 import Widget from '@hexlet/chatbot-v2'
-import '@hexlet/chatbot-v2/styles'
+// import '@hexlet/chatbot-v2/styles'
 import steps from '../__fixtures__/steps.js'
 import { onlyWidget } from './pages.js'
 import { checkVisible, checkButtonsOfStep, checkMessagesOfStep } from './helpers.js'
