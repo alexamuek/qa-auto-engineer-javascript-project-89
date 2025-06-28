@@ -24,13 +24,14 @@ afterEach(() => {
 
 test('positive test - initialize', async () => {
   // init - start
-  const container = render(Widget(steps))
+  // const container = 
+  render(Widget(steps))
   const user = userEvent.setup()
   const widget = new onlyWidget()
   await widget.openWidget(screen, user, widgetButtonName)
   // init - finish
   const [step0] = steps.filter(item => item.id == 'welcome')
-  const dialog = await screen.findByRole('dialog')
+  // const dialog = await screen.findByRole('dialog')
   // await checkVisible(dialog)
   // check: after clicking messages appeared
   await checkMessagesOfStep(step0)
@@ -41,7 +42,8 @@ test('positive test - initialize', async () => {
 
 test('positive test - close dialog', async () => {
   // init - start
-  const container = render(Widget(steps))
+  // const container = 
+  render(Widget(steps))
   const user = userEvent.setup()
   const widget = new onlyWidget()
   await widget.openWidget(screen, user, widgetButtonName)
@@ -56,7 +58,8 @@ test('positive test - close dialog', async () => {
 
 test('positive test - several steps', async () => {
   // init - start
-  const container = render(Widget(steps))
+  // const container = 
+  render(Widget(steps))
   const user = userEvent.setup()
   const widget = new onlyWidget()
   await widget.openWidget(screen, user, widgetButtonName)
@@ -88,7 +91,8 @@ test('positive test - several steps', async () => {
 
 test('positive test - scroll', async () => {
   // init - start
-  const container = render(Widget(steps))
+  // const container = 
+  render(Widget(steps))
   const user = userEvent.setup()
   const widget = new onlyWidget()
   await widget.openWidget(screen, user, widgetButtonName)
@@ -110,7 +114,8 @@ test('positive test - scroll', async () => {
 
 test('positive test - focus on button', async () => {
   // init - start
-  const container = render(Widget(steps))
+  // const container = 
+  render(Widget(steps))
   const user = userEvent.setup()
   const widget = new onlyWidget()
   await widget.openWidget(screen, user, widgetButtonName)
