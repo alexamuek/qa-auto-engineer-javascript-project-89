@@ -39,9 +39,9 @@ test('positive test - fill in form, open widget, close widget', async () => {
   const addressInput = await form.fillInFieldWithPlaceholder(screen, user, 'Невский проспект, 12', address)
   const cityInput = await form.fillInFieldWithLabel(screen, user, 'Город', city)
   const countryInput = await form.selectOption(screen, user, 'Страна', country)
-  const checkbox = await form.clickCheckbox(screen, user, 'Принять правила')
   // return code
-  /* const submitButton = await form.findButton(screen, submitButtonName)
+  /* const checkbox = await form.clickCheckbox(screen, user, 'Принять правила')
+  const submitButton = await form.findButton(screen, submitButtonName)
   const formEls = [emailInput, passwordInput, addressInput, cityInput, countryInput, checkbox, submitButton]
   formEls.forEach(async (item) => {
     await checkVisible(item)
@@ -50,7 +50,7 @@ test('positive test - fill in form, open widget, close widget', async () => {
   /* await waitFor(() => {
     // expect(countryInput).toHaveValue("Россия");
     expect(checkbox).toBeChecked()
-  }) */ 
+  }) */
   // open bot window
   await form.openWidget(screen, user, widgetButtonName)
   const [step0] = steps.filter(item => item.id == 'welcome')
@@ -92,7 +92,9 @@ test('positive test - fill in form, submit, open widget, close widget, press bac
   const addressInput = await form.fillInFieldWithPlaceholder(screen, user, 'Невский проспект, 12', address)
   const cityInput = await form.fillInFieldWithLabel(screen, user, 'Город', city)
   const countryInput = await form.selectOption(screen, user, 'Страна', country)
-  const checkbox = await form.clickCheckbox(screen, user, 'Принять правила')
+  // return code
+  // const checkbox =
+  await form.clickCheckbox(screen, user, 'Принять правила')
   // submit form
   await form.clickButton(screen, user, submitButtonName)
   const resultPage = new ResultPage()
