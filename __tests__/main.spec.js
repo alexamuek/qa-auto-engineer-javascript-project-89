@@ -8,7 +8,8 @@ import Widget from '@hexlet/chatbot-v2'
 // import '@hexlet/chatbot-v2/styles'
 import steps from '../__fixtures__/steps.js'
 import { onlyWidget } from './pages.js'
-import { checkVisible, checkButtonsOfStep, checkMessagesOfStep } from './helpers.js'
+import { checkButtonsOfStep, checkMessagesOfStep } from './helpers.js'
+// checkVisible
 
 const scrollIntoViewMock = vi.fn()
 const widgetButtonName = 'Открыть Чат'
@@ -24,7 +25,6 @@ afterEach(() => {
 
 test('positive test - initialize', async () => {
   // init - start
-  // const container = 
   render(Widget(steps))
   const user = userEvent.setup()
   const widget = new onlyWidget()
@@ -42,7 +42,6 @@ test('positive test - initialize', async () => {
 
 test('positive test - close dialog', async () => {
   // init - start
-  // const container = 
   render(Widget(steps))
   const user = userEvent.setup()
   const widget = new onlyWidget()
@@ -58,7 +57,6 @@ test('positive test - close dialog', async () => {
 
 test('positive test - several steps', async () => {
   // init - start
-  // const container = 
   render(Widget(steps))
   const user = userEvent.setup()
   const widget = new onlyWidget()
@@ -91,7 +89,6 @@ test('positive test - several steps', async () => {
 
 test('positive test - scroll', async () => {
   // init - start
-  // const container = 
   render(Widget(steps))
   const user = userEvent.setup()
   const widget = new onlyWidget()
@@ -114,7 +111,6 @@ test('positive test - scroll', async () => {
 
 test('positive test - focus on button', async () => {
   // init - start
-  // const container = 
   render(Widget(steps))
   const user = userEvent.setup()
   const widget = new onlyWidget()
