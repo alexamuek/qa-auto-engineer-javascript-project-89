@@ -3,62 +3,38 @@ import globals from 'globals'
 import pluginReact from 'eslint-plugin-react'
 import { defineConfig } from 'eslint/config'
 import stylistic from '@stylistic/eslint-plugin'
-import pluginVitest from 'eslint-plugin-vitest'
+// import pluginVitest from 'eslint-plugin-vitest'
+import vitest from '@vitest/eslint-plugin'
 
 export default defineConfig([
   stylistic.configs.recommended,
-  { files: ['src/*.{js,jsx}'],
-    languageOptions: {
-      globals: {
-        ...globals.browser,
-        React: 'readonly',
-      },
-      parserOptions: {
-        ecmaFeatures: {
-          jsx: true,
-        },
-      },
+  { files: ['**/*.{js,mjs,cjs,jsx}'], plugins: { js }, extends: ['js/recommended'] },
+  { files: ['**/*.{js,mjs,cjs,jsx}'], languageOptions: { globals: globals.browser } },
+  pluginReact.configs.flat.recommended,
+  {
+    rules: {
+      'react/prop-types': [0],
+      'react/react-in-jsx-scope': 0,
+      'react/jsx-uses-react': 0,
     },
+  },
+  {
+    files: ['tests/**'], // or any other pattern
+    plugins: {
+      vitest,
+    },
+    rules: {
+      ...vitest.configs.recommended.rules, // you can also use vitest.configs.all.rules to enable all rules
+      'vitest/max-nested-describe': ['error', { max: 3 }], // you can also modify rules' behavior using option like this
+    },
+  },
+  { files: ['src/*.{js,jsx}'],
     plugins: { 'react': pluginReact,
       '@stylistic': stylistic },
     rules: {
-      ...js.configs.recommended.rules,
-      ...pluginReact.configs.recommended.rules,
-      ...stylistic.configs.customize({
-        indent: 2,
-        quotes: 'single',
-        semi: true,
-      }).rules,
       'react/react-in-jsx-scope': 'off',
       'react/jsx-uses-react': 'error',
       'react/jsx-uses-vars': 'error',
     },
-  },
-  {
-    files: ['__tests__/*.{spec,test}.{js,jsx}'],
-    languageOptions: {
-      globals: {
-        ...globals.jest,
-        ...globals.node,
-        window: 'readonly',
-        document: 'readonly',
-        ...pluginVitest.environments.env.globals,
-      },
-    },
-    plugins: {
-      vitest: pluginVitest,
-    },
-    rules: {
-      'no-unused-vars': 'off',
-      'no-undef': 'off',
-      'react/react-in-jsx-scope': 'off',
-    },
-  },
-  pluginReact.configs.flat.recommended,
-  { settings: {
-    react: {
-      version: 'detect',
-    },
-  },
   },
 ])
