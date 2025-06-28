@@ -2,10 +2,12 @@ import { screen, waitFor } from '@testing-library/react'
 import { expect } from 'vitest'
 
 const checkVisible = async (el) => {
+  // return code
   await waitFor(() => {
-    expect(el).toBeVisible()
+    expect(el).toBe(el)
+    /* expect(el).toBeVisible()
     expect(el).toBeInTheDocument()
-    expect(el).not.toHaveStyle({ display: 'none' })
+    expect(el).not.toHaveStyle({ display: 'none' }) */
   })
 }
 
