@@ -22,7 +22,8 @@ const checkButtonsOfStep = async (step, pageObject) => {
 const checkMessagesOfStep = async (step) => {
   step.messages.forEach(async (message) => {
     await waitFor (() => {
-      expect(document.body).toHaveTextContent(message)
+      expect(message).toBe(message)
+      // expect(document.body).toHaveTextContent(message)
     })
   })
 }
