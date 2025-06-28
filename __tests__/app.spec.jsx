@@ -66,6 +66,7 @@ test('positive test - fill in form, open widget, close widget', async () => {
   await form.closeWidget(screen, user, closeButtonName)
   const buttons = await screen.queryAllByText(step0.buttons[0].text)
   // check state after closing of bot window
+  await new Promise(resolve => setTimeout(resolve, 1000))
   await waitFor(() => {
     expect(buttons).toHaveLength(0)
     // return code
@@ -146,6 +147,7 @@ test('positive test - fill in form, submit, open widget, close widget, press bac
   // press Back
   await resultPage.backToForm(screen, user)
   // check state after press Back
+  await new Promise(resolve => setTimeout(resolve, 1000))
   await waitFor(() => {
     expect(emailInput).toHaveValue(email)
     expect(passwordInput).toHaveValue(password)
