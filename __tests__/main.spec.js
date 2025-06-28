@@ -8,8 +8,7 @@ import Widget from '@hexlet/chatbot-v2'
 // import '@hexlet/chatbot-v2/styles'
 import steps from '../__fixtures__/steps.js'
 import { onlyWidget } from './pages.js'
-import { checkButtonsOfStep, checkMessagesOfStep } from './helpers.js'
-// checkVisible
+import { checkVisible, checkButtonsOfStep, checkMessagesOfStep } from './helpers.js'
 
 const scrollIntoViewMock = vi.fn()
 const widgetButtonName = 'Открыть Чат'
@@ -31,8 +30,8 @@ test('positive test - initialize', async () => {
   await widget.openWidget(screen, user, widgetButtonName)
   // init - finish
   const [step0] = steps.filter(item => item.id == 'welcome')
-  // const dialog = await screen.findByRole('dialog')
-  // await checkVisible(dialog)
+  const dialog = await screen.findByRole('dialog')
+  await checkVisible(dialog)
   // check: after clicking messages appeared
   await checkMessagesOfStep(step0)
   // check: after clicking elements appeared with role Button
