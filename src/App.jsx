@@ -1,4 +1,5 @@
-import React, { useState } from 'react'
+// import React, { useState } from 'react'
+import { useState } from 'react'
 import Widget from '@hexlet/chatbot-v2'
 import steps from '../__fixtures__/steps.js'
 // import '@hexlet/chatbot-v2/styles'
