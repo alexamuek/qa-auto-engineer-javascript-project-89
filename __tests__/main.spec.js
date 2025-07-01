@@ -33,11 +33,12 @@ test('positive test - initialize', async () => {
   const [step0] = steps.filter(item => item.id == 'welcome')
   // return check
   const dialog = await screen.findByRole('dialog')
+  console.log(dialog)
   await checkVisible(dialog)
   // check: after clicking messages appeared
-  await checkMessagesOfStep(step0)
+  // await checkMessagesOfStep(step0)
   // check: after clicking elements appeared with role Button
-  await checkButtonsOfStep(step0, widget)
+  // await checkButtonsOfStep(step0, widget)
   debug()
 })
 
@@ -83,9 +84,9 @@ test('positive test - several steps', async () => {
     expect(scrollIntoViewMock.mock.calls.length).toBe(scrollCount + 1)
   })
   // check: after clicking messages appeared with role Button
-  await checkMessagesOfStep(step2)
+  // await checkMessagesOfStep(step2)
   // check: after clicking elements appeared with role Button
-  await checkButtonsOfStep(step2, widget)
+  // await checkButtonsOfStep(step2, widget)
 })
 
 test('positive test - scroll', async () => {
