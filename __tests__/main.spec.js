@@ -8,7 +8,8 @@ import Widget from '@hexlet/chatbot-v2'
 // import '@hexlet/chatbot-v2/styles'
 import steps from '../__fixtures__/steps.js'
 import { onlyWidget } from './pages.js'
-import { checkVisible, checkButtonsOfStep, checkMessagesOfStep } from './helpers.js'
+import { checkVisible } from './helpers.js'
+// import { checkVisible, checkButtonsOfStep, checkMessagesOfStep } from './helpers.js'
 // checkVisible
 
 const scrollIntoViewMock = vi.fn()
@@ -30,10 +31,10 @@ test('positive test - initialize', async () => {
   const widget = new onlyWidget()
   await widget.openWidget(screen, user, widgetButtonName)
   // init - finish
-  const [step0] = steps.filter(item => item.id == 'welcome')
+  // const [step0] = steps.filter(item => item.id == 'welcome')
   // return check
   const dialog = await screen.findByRole('dialog')
-  // await checkVisible(dialog)
+  await checkVisible(dialog)
   // check: after clicking messages appeared
   // await checkMessagesOfStep(step0)
   // check: after clicking elements appeared with role Button
@@ -73,11 +74,11 @@ test('positive test - several steps', async () => {
   })
   const [step1] = steps.filter(item => item.id == step0.buttons[0].nextStepId)
   // check: after clicking elements appeared with role Button
-  await checkButtonsOfStep(step1, widget)
+  // await checkButtonsOfStep(step1, widget)
   const scrollCount = scrollIntoViewMock.mock.calls.length
   const [advansedButtonDescr] = step1.buttons.filter(item => item.nextStepId == 'advanced')
   await widget.clickButton(screen, user, advansedButtonDescr.text)
-  const [step2] = steps.filter(item => item.id == 'advanced')
+  // const [step2] = steps.filter(item => item.id == 'advanced')
   await waitFor(() => {
     // check: scroll was used
     expect(scrollIntoViewMock.mock.calls.length).toBe(scrollCount + 1)

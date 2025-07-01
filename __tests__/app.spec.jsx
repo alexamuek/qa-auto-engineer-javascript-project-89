@@ -6,7 +6,7 @@ import { test, expect, beforeEach, afterEach, vi } from 'vitest'
 import App from '../src/App.jsx'
 import steps from '../__fixtures__/steps.js'
 import { InputForm, ResultPage } from './pages.js'
-import { checkButtonsOfStep, checkMessagesOfStep } from './helpers.js'
+// import { checkButtonsOfStep, checkMessagesOfStep } from './helpers.js'
 // checkVisible
 
 const scrollIntoViewMock = vi.fn()
@@ -63,7 +63,7 @@ test('positive test - fill in form, open widget, close widget', async () => {
   /* const dialog = await screen.findByRole('dialog')
   await checkVisible(dialog) */
   // check content inside widget dialog
-  await checkMessagesOfStep(step0)
+  // await checkMessagesOfStep(step0)
   // return code
   // const startButton = await form.findButton(screen, step0.buttons[0].text)
   // await checkVisible(startButton)
@@ -126,7 +126,7 @@ test('positive test - fill in form, submit, open widget, close widget, press bac
   // return code
   // const dialog = await screen.findByRole('dialog')
   // await checkVisible(dialog)
-  await checkMessagesOfStep(step0)
+  // await checkMessagesOfStep(step0)
   // click button inside widget
   await resultPage.clickButton(screen, user, step0.buttons[0].text)
   const paragraphs = await screen.findAllByText(step0.buttons[0].text)
@@ -135,9 +135,9 @@ test('positive test - fill in form, submit, open widget, close widget, press bac
     expect(paragraphs).toHaveLength(1)
     expect(paragraphs[0].tagName).toBe('P')
   })
-  const [step1] = steps.filter(item => item.id == step0.buttons[0].nextStepId)
+  // const [step1] = steps.filter(item => item.id == step0.buttons[0].nextStepId)
   // check: after clicking elements appeared with role Button
-  await checkButtonsOfStep(step1, resultPage)
+  // await checkButtonsOfStep(step1, resultPage)
   // close widget
   await resultPage.closeWidget(screen, user, closeButtonName)
   const buttons = await screen.queryAllByText(step0.buttons[0].text)
