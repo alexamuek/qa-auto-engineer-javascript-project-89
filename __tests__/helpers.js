@@ -4,9 +4,8 @@ import { expect } from 'vitest'
 const checkVisible = async (el) => {
   // return code
   await waitFor(() => {
-    expect(el).toBe(el)
-    /* expect(el).toBeVisible()
-    expect(el).toBeInTheDocument()
+    expect(el).toBeVisible()
+    /* expect(el).toBeInTheDocument()
     expect(el).not.toHaveStyle({ display: 'none' }) */
   })
 }
