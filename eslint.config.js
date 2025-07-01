@@ -1,9 +1,8 @@
 import js from '@eslint/js'
 import globals from 'globals'
+import stylistic from '@stylistic/eslint-plugin'
 import pluginReact from 'eslint-plugin-react'
 import { defineConfig } from 'eslint/config'
-import stylistic from '@stylistic/eslint-plugin'
-// import pluginVitest from 'eslint-plugin-vitest'
 import vitest from '@vitest/eslint-plugin'
 
 export default defineConfig([
@@ -12,6 +11,13 @@ export default defineConfig([
   { files: ['**/*.{js,mjs,cjs,jsx}'], languageOptions: { globals: globals.browser } },
   pluginReact.configs.flat.recommended,
   {
+    rules: {
+      'react/prop-types': [0],
+      'react/react-in-jsx-scope': 0,
+      'react/jsx-uses-react': 0,
+    },
+  },
+  {
     files: ['tests/**'], // or any other pattern
     plugins: {
       vitest,
@@ -19,16 +25,6 @@ export default defineConfig([
     rules: {
       ...vitest.configs.recommended.rules, // you can also use vitest.configs.all.rules to enable all rules
       'vitest/max-nested-describe': ['error', { max: 3 }], // you can also modify rules' behavior using option like this
-      'no-unused-vars': 'off',
-    },
-  },
-  { files: ['src/*.{js,jsx}'],
-    plugins: { 'react': pluginReact,
-      '@stylistic': stylistic },
-    rules: {
-      'react/react-in-jsx-scope': 'off',
-      'react/jsx-uses-react': 'error',
-      'react/jsx-uses-vars': 'error',
     },
   },
 ])
