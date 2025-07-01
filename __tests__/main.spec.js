@@ -33,7 +33,6 @@ test('positive test - initialize', async () => {
   const [step0] = steps.filter(item => item.id == 'welcome')
   // return check
   const dialog = await screen.findByRole('dialog')
-  console.log(dialog)
   await checkVisible(dialog)
   // check: after clicking messages appeared
   // await checkMessagesOfStep(step0)
