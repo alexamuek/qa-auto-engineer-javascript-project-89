@@ -5,8 +5,8 @@ const checkVisible = async (el) => {
   // return code
   await waitFor(() => {
     expect(el).toBeVisible()
-    /* expect(el).toBeInTheDocument()
-    expect(el).not.toHaveStyle({ display: 'none' }) */
+    expect(el).toBeInTheDocument()
+    // expect(el).not.toHaveStyle({ display: 'none' })
   })
 }
 
@@ -21,8 +21,7 @@ const checkButtonsOfStep = async (step, pageObject) => {
 const checkMessagesOfStep = async (step) => {
   step.messages.forEach(async (message) => {
     await waitFor (() => {
-      expect(message).toBe(message)
-      // expect(document.body).toHaveTextContent(message)
+      expect(document.body).toHaveTextContent(message)
     })
   })
 }

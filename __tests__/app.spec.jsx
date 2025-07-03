@@ -6,8 +6,7 @@ import { test, expect, beforeEach, afterEach, vi } from 'vitest'
 import App from '../src/App.jsx'
 import steps from '../__fixtures__/steps.js'
 import { InputForm, ResultPage } from './pages.js'
-// import { checkButtonsOfStep, checkMessagesOfStep } from './helpers.js'
-// checkVisible
+import { checkVisible, checkButtonsOfStep, checkMessagesOfStep } from './helpers.js'
 
 const scrollIntoViewMock = vi.fn()
 const widgetButtonName = 'Открыть Чат'
@@ -34,53 +33,44 @@ test('positive test - fill in form, open widget, close widget', async () => {
   const form = new InputForm()
   // init - finish
   // find elements and fill in
-  // const emailInput =
-  await form.fillInFieldWithPlaceholder(screen, user, 'Email', email)
-  // const passwordInput =
-  await form.fillInFieldWithPlaceholder(screen, user, 'Пароль', password)
-  // const addressInput =
-  await form.fillInFieldWithPlaceholder(screen, user, 'Невский проспект, 12', address)
-  // const cityInput =
-  await form.fillInFieldWithLabel(screen, user, 'Город', city)
-  // const countryInput =
-  await form.selectOption(screen, user, 'Страна', country)
+  const emailInput = await form.fillInFieldWithPlaceholder(screen, user, 'Email', email)
+  const passwordInput = await form.fillInFieldWithPlaceholder(screen, user, 'Пароль', password)
+  const addressInput = await form.fillInFieldWithPlaceholder(screen, user, 'Невский проспект, 12', address)
+  const cityInput = await form.fillInFieldWithLabel(screen, user, 'Город', city)
+  const countryInput = await form.selectOption(screen, user, 'Страна', country)
   // return code
-  /* const checkbox = await form.clickCheckbox(screen, user, 'Принять правила')
+  const checkbox = await form.clickCheckbox(screen, user, 'Принять правила')
   const submitButton = await form.findButton(screen, submitButtonName)
   const formEls = [emailInput, passwordInput, addressInput, cityInput, countryInput, checkbox, submitButton]
   formEls.forEach(async (item) => {
     await checkVisible(item)
-  }) */
-  // return code
-  /* await waitFor(() => {
+  })
+  await waitFor(() => {
     // expect(countryInput).toHaveValue("Россия");
     expect(checkbox).toBeChecked()
-  }) */
+  })
   // open bot window
   await form.openWidget(screen, user, widgetButtonName)
   const [step0] = steps.filter(item => item.id == 'welcome')
-  // return code
-  /* const dialog = await screen.findByRole('dialog')
-  await checkVisible(dialog) */
+  const dialog = await screen.findByRole('dialog')
+  await checkVisible(dialog)
   // check content inside widget dialog
-  // await checkMessagesOfStep(step0)
-  // return code
-  // const startButton = await form.findButton(screen, step0.buttons[0].text)
-  // await checkVisible(startButton)
+  await checkMessagesOfStep(step0)
+  const startButton = await form.findButton(screen, step0.buttons[0].text)
+  await checkVisible(startButton)
   // close widget dialog
   await form.closeWidget(screen, user, closeButtonName)
   const buttons = await screen.queryAllByText(step0.buttons[0].text)
   // check state after closing of bot window
   await waitFor(() => {
     expect(buttons).toHaveLength(0)
-    // return code
-    /* expect(dialog).not.toBeInTheDocument()
+    expect(dialog).not.toBeInTheDocument()
     expect(emailInput).toHaveValue(email)
     expect(passwordInput).toHaveValue(password)
     expect(addressInput).toHaveValue(address)
     expect(cityInput).toHaveValue(city)
-    expect(countryInput).toHaveValue('Россия')
-    expect(checkbox).toBeChecked() */
+    expect(countryInput).toHaveValue(country)
+    expect(checkbox).toBeChecked()
   })
 })
 
@@ -91,28 +81,21 @@ test('positive test - fill in form, submit, open widget, close widget, press bac
   const form = new InputForm()
   // init - finish
   // find elements and fill in
-  // const emailInput =
-  await form.fillInFieldWithPlaceholder(screen, user, 'Email', email)
-  // const passwordInput =
-  await form.fillInFieldWithPlaceholder(screen, user, 'Пароль', password)
-  // const addressInput =
-  await form.fillInFieldWithPlaceholder(screen, user, 'Невский проспект, 12', address)
-  // const cityInput =
-  await form.fillInFieldWithLabel(screen, user, 'Город', city)
-  // const countryInput =
-  await form.selectOption(screen, user, 'Страна', country)
+  const emailInput = await form.fillInFieldWithPlaceholder(screen, user, 'Email', email)
+  const passwordInput = await form.fillInFieldWithPlaceholder(screen, user, 'Пароль', password)
+  const addressInput = await form.fillInFieldWithPlaceholder(screen, user, 'Невский проспект, 12', address)
+  const cityInput = await form.fillInFieldWithLabel(screen, user, 'Город', city)
+  const countryInput = await form.selectOption(screen, user, 'Страна', country)
   // return code
-  // const checkbox =
-  await form.clickCheckbox(screen, user, 'Принять правила')
+  const checkbox = await form.clickCheckbox(screen, user, 'Принять правила')
   // submit form
   await form.clickButton(screen, user, submitButtonName)
   const resultPage = new ResultPage()
   const resultCells = await resultPage.getResultTable(screen)
   // check stored data
-  // return code
-  /* resultCells.forEach(async (item) => {
+  resultCells.forEach(async (item) => {
     await checkVisible(item)
-  }) */
+  })
   const actualTableValues = resultCells.map(item => item.textContent)
   const expectTableValues = [email, password, address, city, country, 'true', 'Принять правила', 'Адрес', 'Город', 'Страна', 'Email', 'Пароль']
   // check data
@@ -123,10 +106,9 @@ test('positive test - fill in form, submit, open widget, close widget, press bac
   // open bot window
   await resultPage.openWidget(screen, user, widgetButtonName)
   const [step0] = steps.filter(item => item.id == 'welcome')
-  // return code
-  // const dialog = await screen.findByRole('dialog')
-  // await checkVisible(dialog)
-  // await checkMessagesOfStep(step0)
+  const dialog = await screen.findByRole('dialog')
+  await checkVisible(dialog)
+  await checkMessagesOfStep(step0)
   // click button inside widget
   await resultPage.clickButton(screen, user, step0.buttons[0].text)
   const paragraphs = await screen.findAllByText(step0.buttons[0].text)
@@ -135,9 +117,9 @@ test('positive test - fill in form, submit, open widget, close widget, press bac
     expect(paragraphs).toHaveLength(1)
     expect(paragraphs[0].tagName).toBe('P')
   })
-  // const [step1] = steps.filter(item => item.id == step0.buttons[0].nextStepId)
+  const [step1] = steps.filter(item => item.id == step0.buttons[0].nextStepId)
   // check: after clicking elements appeared with role Button
-  // await checkButtonsOfStep(step1, resultPage)
+  await checkButtonsOfStep(step1, resultPage)
   // close widget
   await resultPage.closeWidget(screen, user, closeButtonName)
   const buttons = await screen.queryAllByText(step0.buttons[0].text)
@@ -145,29 +127,27 @@ test('positive test - fill in form, submit, open widget, close widget, press bac
     expect(buttons).toHaveLength(0)
   })
   // check state after closing of bot window
-  // return code
-  /* resultCells.forEach(async (item) => {
+  resultCells.forEach(async (item) => {
     await checkVisible(item)
   })
   await waitFor(() => {
     expect(dialog).not.toBeInTheDocument()
-  }) */
+  })
   // press Back
   await resultPage.backToForm(screen, user)
   // check state after press Back
-  // return code
-  /* await waitFor(() => {
+  await waitFor(() => {
     expect(emailInput).toHaveValue(email)
     expect(passwordInput).toHaveValue(password)
     expect(addressInput).toHaveValue(address)
     expect(cityInput).toHaveValue(city)
-    expect(countryInput).toHaveValue('Россия')
+    expect(countryInput).toHaveValue(country)
     expect(checkbox).toBeChecked()
     resultCells.forEach((item) => {
       expect(item).not.toBeInTheDocument()
-      // expect(item).not.toBeVisible()
+      expect(item).not.toBeVisible()
     })
-  }) */
+  })
   // check press Back - Back is not in DOM
   await expect(
     resultPage.backToForm(screen, user),

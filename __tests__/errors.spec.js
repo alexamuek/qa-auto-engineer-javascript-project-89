@@ -4,7 +4,6 @@ import { test, expect, beforeEach, afterEach, vi } from 'vitest'
 // import { debug } from 'vitest-preview'
 
 import Widget from '@hexlet/chatbot-v2'
-import '@hexlet/chatbot-v2/styles'
 
 import Steps1 from '../__fixtures__/errorSteps1.js'
 import Steps2 from '../__fixtures__/errorSteps2.js'
@@ -32,7 +31,7 @@ afterEach(() => {
 
 test('1 - negative test - no message, no button property', async () => {
   // init - start
-  const container = render(Widget(Steps1))
+  render(Widget(Steps1))
   const user = userEvent.setup()
   const widget = new onlyWidget()
   await widget.openWidget(screen, user, widgetButtonName)
@@ -49,7 +48,7 @@ test('1 - negative test - no message, no button property', async () => {
 
 test('2 - negative test - empty message array, empty button array', async () => {
   // init - start
-  const container = render(Widget(Steps2))
+  render(Widget(Steps2))
   const user = userEvent.setup()
   const widget = new onlyWidget()
   await widget.openWidget(screen, user, widgetButtonName)
@@ -78,7 +77,7 @@ test('2 - negative test - empty message array, empty button array', async () => 
 
 test('3 - negative test - link to non-existed step Start', async () => {
   // init - start
-  const container = render(Widget(Steps3))
+  render(Widget(Steps3))
   const user = userEvent.setup()
   const widget = new onlyWidget()
   await widget.openWidget(screen, user, widgetButtonName)
@@ -97,7 +96,7 @@ test('3 - negative test - link to non-existed step Start', async () => {
 
 test('4 - negative test - nextStepId links to itself', async () => {
   // init - start
-  const container = render(Widget(Steps4))
+  render(Widget(Steps4))
   const user = userEvent.setup()
   const widget = new onlyWidget()
   await widget.openWidget(screen, user, widgetButtonName)
@@ -120,7 +119,7 @@ test('4 - negative test - nextStepId links to itself', async () => {
 
 test('5 - negative test - button object doesn\'t have text property', async () => {
   // init - start
-  const container = render(Widget(Steps5))
+  render(Widget(Steps5))
   const user = userEvent.setup()
   const widget = new onlyWidget()
   await widget.openWidget(screen, user, widgetButtonName)
@@ -145,7 +144,7 @@ test('5 - negative test - button object doesn\'t have text property', async () =
 
 test('6 - negative test - button object doesn\'t have nextStepId property', async () => {
   // init - start
-  const container = render(Widget(Steps6))
+  render(Widget(Steps6))
   const user = userEvent.setup()
   const widget = new onlyWidget()
   await widget.openWidget(screen, user, widgetButtonName)
@@ -168,7 +167,7 @@ test('6 - negative test - button object doesn\'t have nextStepId property', asyn
 
 test('7 - negative test - button object doesn\'t have Type property', async () => {
   // init - start
-  const container = render(Widget(Steps7))
+  render(Widget(Steps7))
   const user = userEvent.setup()
   const widget = new onlyWidget()
   await widget.openWidget(screen, user, widgetButtonName)
@@ -187,7 +186,7 @@ test('7 - negative test - button object doesn\'t have Type property', async () =
 
 test('8 - negative test - wrong type of button', async () => {
   // init - start
-  const container = render(Widget(Steps8))
+  render(Widget(Steps8))
   const user = userEvent.setup()
   const widget = new onlyWidget()
   await widget.openWidget(screen, user, widgetButtonName)
@@ -206,7 +205,7 @@ test('8 - negative test - wrong type of button', async () => {
 
 test('9 - negative test - next step doesn\'t have id', async () => {
   // init - start
-  const container = render(Widget(Steps9))
+  render(Widget(Steps9))
   const user = userEvent.setup()
   const widget = new onlyWidget()
   await widget.openWidget(screen, user, widgetButtonName)

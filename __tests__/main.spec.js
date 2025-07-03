@@ -2,15 +2,11 @@ import { render, screen, waitFor, fireEvent, cleanup } from '@testing-library/re
 import userEvent from '@testing-library/user-event'
 import { test, expect, beforeEach, afterEach, vi } from 'vitest'
 import { debug } from 'vitest-preview'
-// import App from '../src/forTest.jsx'
 
 import Widget from '@hexlet/chatbot-v2'
-// import '@hexlet/chatbot-v2/styles'
 import steps from '../__fixtures__/steps.js'
 import { onlyWidget } from './pages.js'
-// import { checkVisible } from './helpers.js'
-// import { checkVisible, checkButtonsOfStep, checkMessagesOfStep } from './helpers.js'
-// checkVisible
+import { checkVisible, checkButtonsOfStep, checkMessagesOfStep } from './helpers.js'
 
 const scrollIntoViewMock = vi.fn()
 const widgetButtonName = 'Открыть Чат'
@@ -31,18 +27,13 @@ test('positive test - initialize', async () => {
   const widget = new onlyWidget()
   await widget.openWidget(screen, user, widgetButtonName)
   // init - finish
-  // const [step0] = steps.filter(item => item.id == 'welcome')
-  // return check
+  const [step0] = steps.filter(item => item.id == 'welcome')
   const dialog = await screen.findByRole('dialog')
-  console.log(dialog)
-  await waitFor(() => {
-    expect(dialog).toBeVisible()
-  })
-  // await checkVisible(dialog)
+  await checkVisible(dialog)
   // check: after clicking messages appeared
-  // await checkMessagesOfStep(step0)
+  await checkMessagesOfStep(step0)
   // check: after clicking elements appeared with role Button
-  // await checkButtonsOfStep(step0, widget)
+  await checkButtonsOfStep(step0, widget)
   debug()
 })
 
@@ -78,19 +69,19 @@ test('positive test - several steps', async () => {
   })
   const [step1] = steps.filter(item => item.id == step0.buttons[0].nextStepId)
   // check: after clicking elements appeared with role Button
-  // await checkButtonsOfStep(step1, widget)
+  await checkButtonsOfStep(step1, widget)
   const scrollCount = scrollIntoViewMock.mock.calls.length
   const [advansedButtonDescr] = step1.buttons.filter(item => item.nextStepId == 'advanced')
   await widget.clickButton(screen, user, advansedButtonDescr.text)
-  // const [step2] = steps.filter(item => item.id == 'advanced')
+  const [step2] = steps.filter(item => item.id == 'advanced')
   await waitFor(() => {
     // check: scroll was used
     expect(scrollIntoViewMock.mock.calls.length).toBe(scrollCount + 1)
   })
   // check: after clicking messages appeared with role Button
-  // await checkMessagesOfStep(step2)
+  await checkMessagesOfStep(step2)
   // check: after clicking elements appeared with role Button
-  // await checkButtonsOfStep(step2, widget)
+  await checkButtonsOfStep(step2, widget)
 })
 
 test('positive test - scroll', async () => {
