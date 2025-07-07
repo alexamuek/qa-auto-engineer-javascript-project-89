@@ -2,7 +2,6 @@
 import { render, screen, waitFor, cleanup } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { test, expect, beforeEach, afterEach, vi } from 'vitest'
-// import { debug } from 'vitest-preview'
 import App from '../src/App.jsx'
 import steps from '../__fixtures__/steps.js'
 import { InputForm, ResultPage } from './pages.js'
