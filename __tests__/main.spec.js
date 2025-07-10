@@ -34,7 +34,7 @@ test('positive test - initialize', async () => {
   await checkMessagesOfStep(step0)
   // check: after clicking elements appeared with role Button
   await checkButtonsOfStep(step0, widget)
-  debug()
+  // debug()
 })
 
 test('positive test - close dialog', async () => {
