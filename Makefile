@@ -1,2 +1,8 @@
+install:
+	npm ci
+publish:
+	npm publish --dry-run
 test:
-	npm test
+	npx vitest run
+lint:
+	npx eslint .
