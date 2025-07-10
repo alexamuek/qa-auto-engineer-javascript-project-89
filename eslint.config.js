@@ -3,9 +3,14 @@ import globals from 'globals'
 import stylistic from '@stylistic/eslint-plugin'
 import pluginReact from 'eslint-plugin-react'
 import { defineConfig } from 'eslint/config'
+import { includeIgnoreFile } from '@eslint/compat'
+import { fileURLToPath } from 'url'
 import vitest from '@vitest/eslint-plugin'
 
+const gitIgnorePath = fileURLToPath(new URL('.gitignore', import.meta.url))
+
 export default defineConfig([
+  includeIgnoreFile(gitIgnorePath),
   stylistic.configs.recommended,
   { files: ['**/*.{js,mjs,cjs,jsx}'], plugins: { js }, extends: ['js/recommended'] },
   { files: ['**/*.{js,mjs,cjs,jsx}'], languageOptions: { globals: globals.browser } },
