@@ -2,10 +2,9 @@
 import { render, screen, waitFor, cleanup } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { test, expect, beforeEach, afterEach, vi } from 'vitest'
-import App from '../src/App.jsx'
 import steps from '../__fixtures__/steps.js'
-import { InputForm, ResultPage } from './pages/App.js'
-import { checkVisible, checkButtonsOfStep, checkMessagesOfStep } from './helpers.js'
+import { InputForm, ResultPage } from './pages/App.jsx'
+import { checkVisible, checkButtonsOfStep, checkMessagesOfStep, checkVisibleSync } from './helpers.js'
 
 const scrollIntoViewMock = vi.fn()
 const widgetButtonName = 'Открыть Чат'
@@ -27,7 +26,7 @@ afterEach(() => {
 
 test('positive test - fill in form, open widget, close widget', async () => {
   // init - start
-  render(<App />)
+  InputForm.renderApp()
   const user = userEvent.setup()
   const form = new InputForm()
   // init - finish
@@ -42,40 +41,36 @@ test('positive test - fill in form, open widget, close widget', async () => {
   const submitButton = await form.findButton(screen, submitButtonName)
   const formEls = [emailInput, passwordInput, addressInput, cityInput, countryInput, checkbox, submitButton]
   formEls.forEach(async (item) => {
-    await checkVisible(item)
+    checkVisibleSync(item)
   })
-  await waitFor(() => {
-    // expect(countryInput).toHaveValue("Россия");
-    expect(checkbox).toBeChecked()
-  })
+  expect(countryInput).toHaveValue(country);
+  expect(checkbox).toBeChecked()
   // open bot window
   await form.openWidget(screen, user, widgetButtonName)
   const [welcomeStep] = steps.filter(item => item.id == 'welcome')
   const dialog = await screen.findByRole('dialog')
-  await checkVisible(dialog)
+  checkVisibleSync(dialog)
   // check content inside widget dialog
-  await checkMessagesOfStep(welcomeStep)
+  checkMessagesOfStep(welcomeStep)
   const startButton = await form.findButton(screen, welcomeStep.buttons[0].text)
-  await checkVisible(startButton)
+  checkVisible(startButton)
   // close widget dialog
   await form.closeWidget(screen, user, closeButtonName)
   const buttons = await screen.queryAllByText(welcomeStep.buttons[0].text)
   // check state after closing of bot window
-  await waitFor(() => {
-    expect(buttons).toHaveLength(0)
-    expect(dialog).not.toBeInTheDocument()
-    expect(emailInput).toHaveValue(email)
-    expect(passwordInput).toHaveValue(password)
-    expect(addressInput).toHaveValue(address)
-    expect(cityInput).toHaveValue(city)
-    expect(countryInput).toHaveValue(country)
-    expect(checkbox).toBeChecked()
-  })
+  expect(buttons).toHaveLength(0)
+  expect(dialog).not.toBeInTheDocument()
+  expect(emailInput).toHaveValue(email)
+  expect(passwordInput).toHaveValue(password)
+  expect(addressInput).toHaveValue(address)
+  expect(cityInput).toHaveValue(city)
+  expect(countryInput).toHaveValue(country)
+  expect(checkbox).toBeChecked()
 })
 
 test('positive test - fill in form, submit, open widget, close widget, press back', async () => {
   // init - start
-  render(<App />)
+  InputForm.renderApp()
   const user = userEvent.setup()
   const form = new InputForm()
   // init - finish
@@ -92,60 +87,50 @@ test('positive test - fill in form, submit, open widget, close widget, press bac
   const resultPage = new ResultPage()
   const resultCells = await resultPage.getResultTable(screen)
   // check stored data
-  resultCells.forEach(async (item) => {
-    await checkVisible(item)
+  resultCells.forEach((item) => {
+    checkVisibleSync(item)
   })
   const actualTableValues = resultCells.map(item => item.textContent)
   const expectTableValues = [email, password, address, city, country, 'true', 'Принять правила', 'Адрес', 'Город', 'Страна', 'Email', 'Пароль']
   // check data
-  await waitFor(() => {
-    expect(actualTableValues).toEqual(expect.arrayContaining(expectTableValues))
-    expect(expectTableValues).toEqual(expect.arrayContaining(actualTableValues))
-  })
+  expect(actualTableValues).toEqual(expect.arrayContaining(expectTableValues))
+  expect(expectTableValues).toEqual(expect.arrayContaining(actualTableValues))
   // open bot window
   await resultPage.openWidget(screen, user, widgetButtonName)
   const [welcomeStep] = steps.filter(item => item.id == 'welcome')
   const dialog = await screen.findByRole('dialog')
-  await checkVisible(dialog)
-  await checkMessagesOfStep(welcomeStep)
+  checkVisibleSync(dialog)
+  checkMessagesOfStep(welcomeStep)
   // click button inside widget
   await resultPage.clickButton(screen, user, welcomeStep.buttons[0].text)
   const paragraphs = await screen.findAllByText(welcomeStep.buttons[0].text)
-  await waitFor(() => {
-    // check: button was replaced by text message after click
-    expect(paragraphs).toHaveLength(1)
-    expect(paragraphs[0].tagName).toBe('P')
-  })
+  // check: button was replaced by text message after click
+  expect(paragraphs).toHaveLength(1)
+  expect(paragraphs[0].tagName).toBe('P')
   const [startStep] = steps.filter(item => item.id == welcomeStep.buttons[0].nextStepId)
   // check: after clicking elements appeared with role Button
   await checkButtonsOfStep(startStep, resultPage, screen)
   // close widget
   await resultPage.closeWidget(screen, user, closeButtonName)
   const buttons = await screen.queryAllByText(welcomeStep.buttons[0].text)
-  await waitFor(() => {
-    expect(buttons).toHaveLength(0)
-  })
+  expect(buttons).toHaveLength(0)
   // check state after closing of bot window
-  resultCells.forEach(async (item) => {
-    await checkVisible(item)
+  resultCells.forEach((item) => {
+    checkVisibleSync(item)
   })
-  await waitFor(() => {
-    expect(dialog).not.toBeInTheDocument()
-  })
+  expect(dialog).not.toBeInTheDocument()
   // press Back
   await resultPage.backToForm(screen, user)
   // check state after press Back
-  await waitFor(() => {
-    expect(emailInput).toHaveValue(email)
-    expect(passwordInput).toHaveValue(password)
-    expect(addressInput).toHaveValue(address)
-    expect(cityInput).toHaveValue(city)
-    expect(countryInput).toHaveValue(country)
-    expect(checkbox).toBeChecked()
-    resultCells.forEach((item) => {
-      expect(item).not.toBeInTheDocument()
-      expect(item).not.toBeVisible()
-    })
+  expect(emailInput).toHaveValue(email)
+  expect(passwordInput).toHaveValue(password)
+  expect(addressInput).toHaveValue(address)
+  expect(cityInput).toHaveValue(city)
+  expect(countryInput).toHaveValue(country)
+  expect(checkbox).toBeChecked()
+  resultCells.forEach((item) => {
+    expect(item).not.toBeInTheDocument()
+    expect(item).not.toBeVisible()
   })
   // check press Back - Back is not in DOM
   await expect(

@@ -1,5 +1,12 @@
+import { render } from '@testing-library/react'
+import Widget from '@hexlet/chatbot-v2'
+
 export class WidgetWindow {
   constructor() {}
+
+  static renderWidget(steps) {
+    render(Widget(steps))
+  }
 
   async findButton(screen, label) {
     const button = await screen.findByRole('button', { name: label })
@@ -13,7 +20,7 @@ export class WidgetWindow {
 
   async openWidget(screen, user, widgetButtonName) {
     const button = await screen.findByRole('button', { name: widgetButtonName })
-    await user.click(button)
+    user.click(button)
   }
 
   async closeWidget(screen, user, closeButtonName) {

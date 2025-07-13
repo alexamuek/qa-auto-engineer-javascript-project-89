@@ -1,10 +1,16 @@
+import { render } from '@testing-library/react'
 import { WidgetWindow } from './WidgetWindow.js'
+import App from '../../src/App.jsx'
 
 const backButtonName = 'Назад'
 
 export class InputForm extends WidgetWindow {
   constructor() {
     super()
+  }
+
+  static renderApp() {
+    render(<App />)
   }
 
   async fillInFieldWithPlaceholder(screen, user, label, value) {
@@ -21,7 +27,7 @@ export class InputForm extends WidgetWindow {
 
   async selectOption(screen, user, label, value) {
     const el = await screen.findByRole('combobox', { name: label })
-    await user.selectOptions(el, value)
+    user.selectOptions(el, value)
     return el
   }
 
