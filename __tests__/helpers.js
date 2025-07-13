@@ -10,10 +10,12 @@ const checkVisible = async (el) => {
 }
 
 const checkButtonsOfStep = async (step, pageObject, screen) => {
-  step.buttons.forEach(async (button) => {
-    // check: after clicking elements appeared with role Button
-    const buttonEl = await screen.findByRole('button', { name: button.text })
-    await checkVisible(buttonEl)
+  await waitFor (() => {
+    step.buttons.forEach(async (button) => {
+      // check: after clicking elements appeared with role Button
+      const buttonEl = await screen.findByRole('button', { name: button.text })
+      await checkVisible(buttonEl)
+    })
   })
 }
 

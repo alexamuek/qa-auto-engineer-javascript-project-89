@@ -6,8 +6,7 @@ import { debug } from 'vitest-preview'
 import Widget from '@hexlet/chatbot-v2'
 import steps from '../__fixtures__/steps.js'
 import { WidgetWindow } from './pages/WidgetWindow.js'
-// import { checkVisible, checkButtonsOfStep, checkMessagesOfStep } from './helpers.js'
-import { checkVisible, checkMessagesOfStep } from './helpers.js'
+import { checkVisible, checkButtonsOfStep, checkMessagesOfStep } from './helpers.js'
 
 import Steps1 from '../__fixtures__/errorSteps1.js'
 import Steps2 from '../__fixtures__/errorSteps2.js'
@@ -46,9 +45,7 @@ describe('Widget pass cases', () => {
     // check: after clicking messages appeared
     await checkMessagesOfStep(welcomeStep)
     // check: after clicking elements appeared with role Button
-    debug()
-    // await checkButtonsOfStep(welcomeStep, widget, screen)
-    // debug()
+    await checkButtonsOfStep(welcomeStep, widget, screen)
   })
 
   test('positive test - close dialog', async () => {
@@ -83,7 +80,7 @@ describe('Widget pass cases', () => {
     })
     const [startStep] = steps.filter(item => item.id == welcomeStep.buttons[0].nextStepId)
     // check: after clicking elements appeared with role Button
-    // await checkButtonsOfStep(startStep, widget, screen)
+    await checkButtonsOfStep(startStep, widget, screen)
     const scrollCount = scrollIntoViewMock.mock.calls.length
     const [advansedButtonDescr] = startStep.buttons.filter(item => item.nextStepId == 'advanced')
     await widget.clickButton(screen, user, advansedButtonDescr.text)
@@ -95,7 +92,7 @@ describe('Widget pass cases', () => {
     // check: after clicking messages appeared with role Button
     await checkMessagesOfStep(advansedStep)
     // check: after clicking elements appeared with role Button
-    // await checkButtonsOfStep(advansedStep, widget, screen)
+    await checkButtonsOfStep(advansedStep, widget, screen)
   })
 
   test('positive test - scroll', async () => {
