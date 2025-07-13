@@ -7,16 +7,7 @@ import Widget from '@hexlet/chatbot-v2'
 import steps from '../__fixtures__/steps.js'
 import { WidgetWindow } from './pages/WidgetWindow.js'
 import { checkVisible, checkButtonsOfStep, checkMessagesOfStep } from './helpers.js'
-
-import Steps1 from '../__fixtures__/errorSteps1.js'
-import Steps2 from '../__fixtures__/errorSteps2.js'
-import Steps3 from '../__fixtures__/errorSteps3.js'
-import Steps4 from '../__fixtures__/errorSteps4.js'
-import Steps5 from '../__fixtures__/errorSteps5.js'
-import Steps6 from '../__fixtures__/errorSteps6.js'
-import Steps7 from '../__fixtures__/errorSteps7.js'
-import Steps8 from '../__fixtures__/errorSteps8.js'
-import Steps9 from '../__fixtures__/errorSteps9.js'
+import ErrorsSteps from '../__fixtures__/errorsSteps.js'
 
 const scrollIntoViewMock = vi.fn()
 const widgetButtonName = 'Открыть Чат'
@@ -139,12 +130,13 @@ describe('Widget pass cases', () => {
 describe('Widget errors cases', () => {
   test('1 - negative test - no message, no button property', async () => {
     // init - start
-    render(Widget(Steps1))
+    const steps = ErrorsSteps.no_message_and_buttons
+    render(Widget(steps))
     const user = userEvent.setup()
     const widget = new WidgetWindow()
     await widget.openWidget(screen, user, widgetButtonName)
     // init - finish
-    const [welcomeStep] = Steps1.filter(item => item.id == 'welcome')
+    const [welcomeStep] = steps.filter(item => item.id == 'welcome')
     const dialog = await screen.findByRole('dialog')
     await checkVisible(dialog)
     await expect(
@@ -156,17 +148,18 @@ describe('Widget errors cases', () => {
 
   test('2 - negative test - empty message array, empty button array', async () => {
     // init - start
-    render(Widget(Steps2))
+    const steps = ErrorsSteps.empty_message_and_button_array
+    render(Widget(steps))
     const user = userEvent.setup()
     const widget = new WidgetWindow()
     await widget.openWidget(screen, user, widgetButtonName)
     // init - finish
     const dialog = await screen.findByRole('dialog')
     await checkVisible(dialog)
-    const [welcomeStep] = Steps2.filter(item => item.id == 'welcome')
+    const [welcomeStep] = steps.filter(item => item.id == 'welcome')
     await widget.clickButton(screen, user, welcomeStep.buttons[0].text)
     const paragraphs = await screen.findAllByText(welcomeStep.buttons[0].text)
-    const [startStep] = Steps2.filter(item => item.id == welcomeStep.buttons[0].nextStepId)
+    const [startStep] = steps.filter(item => item.id == welcomeStep.buttons[0].nextStepId)
     await waitFor(() => {
       // check: button was replaced by text message after click
       expect(paragraphs).toHaveLength(1)
@@ -185,14 +178,15 @@ describe('Widget errors cases', () => {
 
   test('3 - negative test - link to non-existed step Start', async () => {
     // init - start
-    render(Widget(Steps3))
+    const steps = ErrorsSteps.non_existed_step
+    render(Widget(steps))
     const user = userEvent.setup()
     const widget = new WidgetWindow()
     await widget.openWidget(screen, user, widgetButtonName)
     // init - finish
     const dialog = await screen.findByRole('dialog')
     await checkVisible(dialog)
-    const [welcomeStep] = Steps3.filter(item => item.id == 'welcome')
+    const [welcomeStep] = steps.filter(item => item.id == 'welcome')
     await widget.clickButton(screen, user, welcomeStep.buttons[0].text)
     const startButtonAgain = await screen.findByRole('button', { name: welcomeStep.buttons[0].text })
     await waitFor(() => {
@@ -204,14 +198,15 @@ describe('Widget errors cases', () => {
 
   test('4 - negative test - nextStepId links to itself', async () => {
     // init - start
-    render(Widget(Steps4))
+    const steps = ErrorsSteps.self_linking
+    render(Widget(steps))
     const user = userEvent.setup()
     const widget = new WidgetWindow()
     await widget.openWidget(screen, user, widgetButtonName)
     // init - finish
     const dialog = await screen.findByRole('dialog')
     await checkVisible(dialog)
-    const [welcomeStep] = Steps4.filter(item => item.id == 'welcome')
+    const [welcomeStep] = steps.filter(item => item.id == 'welcome')
     await widget.clickButton(screen, user, welcomeStep.buttons[0].text)
     const elements = await screen.findAllByText(welcomeStep.buttons[0].text)
     const validTags = ['P', 'BUTTON']
@@ -227,7 +222,8 @@ describe('Widget errors cases', () => {
 
   test('5 - negative test - button object doesn\'t have text property', async () => {
     // init - start
-    render(Widget(Steps5))
+    const steps = ErrorsSteps.button_without_text_property
+    render(Widget(steps))
     const user = userEvent.setup()
     const widget = new WidgetWindow()
     await widget.openWidget(screen, user, widgetButtonName)
@@ -236,7 +232,7 @@ describe('Widget errors cases', () => {
     await checkVisible(dialog)
     const welcomeButton = await widget.findButton(screen, '')
     await checkVisible(welcomeButton)
-    const [welcomeStep] = Steps5.filter(item => item.id == 'welcome')
+    const [welcomeStep] = steps.filter(item => item.id == 'welcome')
     welcomeStep.messages.forEach(async (message) => {
       const pEl = await screen.findByText(message)
       // check
@@ -250,14 +246,15 @@ describe('Widget errors cases', () => {
 
   test('6 - negative test - button object doesn\'t have nextStepId property', async () => {
     // init - start
-    render(Widget(Steps6))
+    const steps = ErrorsSteps.button_without_nextStepId_property
+    render(Widget(steps))
     const user = userEvent.setup()
     const widget = new WidgetWindow()
     await widget.openWidget(screen, user, widgetButtonName)
     // init - finish
     const dialog = await screen.findByRole('dialog')
     await checkVisible(dialog)
-    const [welcomeStep] = Steps6.filter(item => item.id == 'welcome')
+    const [welcomeStep] = steps.filter(item => item.id == 'welcome')
     await widget.clickButton(screen, user, welcomeStep.buttons[0].text)
     const elements = await screen.findAllByText(welcomeStep.buttons[0].text)
     const validTags = ['P', 'BUTTON']
@@ -273,16 +270,17 @@ describe('Widget errors cases', () => {
 
   test('7 - negative test - button object doesn\'t have Type property', async () => {
     // init - start
-    render(Widget(Steps7))
+    const steps = ErrorsSteps.button_without_type_property
+    render(Widget(steps))
     const user = userEvent.setup()
     const widget = new WidgetWindow()
     await widget.openWidget(screen, user, widgetButtonName)
     // init - finish
     const dialog = await screen.findByRole('dialog')
     await checkVisible(dialog)
-    const [welcomeStep] = Steps7.filter(item => item.id == 'welcome')
+    const [welcomeStep] = steps.filter(item => item.id == 'welcome')
     await widget.clickButton(screen, user, welcomeStep.buttons[0].text)
-    const [startStep] = Steps7.filter(item => item.id == welcomeStep.buttons[0].nextStepId)
+    const [startStep] = steps.filter(item => item.id == welcomeStep.buttons[0].nextStepId)
     startStep.buttons.forEach(async (button) => {
       // check: after clicking elements appeared with role Button
       const buttonEl = await widget.findButton(screen, button.text)
@@ -292,16 +290,17 @@ describe('Widget errors cases', () => {
 
   test('8 - negative test - wrong type of button', async () => {
     // init - start
-    render(Widget(Steps8))
+    const steps = ErrorsSteps.wrong_button_type
+    render(Widget(steps))
     const user = userEvent.setup()
     const widget = new WidgetWindow()
     await widget.openWidget(screen, user, widgetButtonName)
     // init - finish
     const dialog = await screen.findByRole('dialog')
     await checkVisible(dialog)
-    const [welcomeStep] = Steps8.filter(item => item.id == 'welcome')
+    const [welcomeStep] = steps.filter(item => item.id == 'welcome')
     await widget.clickButton(screen, user, welcomeStep.buttons[0].text)
-    const [startStep] = Steps8.filter(item => item.id == welcomeStep.buttons[0].nextStepId)
+    const [startStep] = steps.filter(item => item.id == welcomeStep.buttons[0].nextStepId)
     startStep.buttons.forEach(async (button) => {
       // check: after clicking elements appeared with role Button
       const buttonEl = await widget.findButton(screen, button.text)
@@ -311,16 +310,16 @@ describe('Widget errors cases', () => {
 
   test('9 - negative test - next step doesn\'t have id', async () => {
     // init - start
-    render(Widget(Steps9))
+    const steps = ErrorsSteps.next_step_without_id
+    render(Widget(steps))
     const user = userEvent.setup()
     const widget = new WidgetWindow()
     await widget.openWidget(screen, user, widgetButtonName)
     // init - finish
     const dialog = await screen.findByRole('dialog')
     await checkVisible(dialog)
-    const [welcomeStep] = Steps9.filter(item => item.id == 'welcome')
+    const [welcomeStep] = steps.filter(item => item.id == 'welcome')
     await widget.clickButton(screen, user, welcomeStep.buttons[0].text)
-
     const elements = await screen.findAllByText(welcomeStep.buttons[0].text)
     const validTags = ['P', 'BUTTON']
     elements.forEach(async (el) => {
