@@ -50,16 +50,16 @@ test('positive test - fill in form, open widget, close widget', async () => {
   })
   // open bot window
   await form.openWidget(screen, user, widgetButtonName)
-  const [step0] = steps.filter(item => item.id == 'welcome')
+  const [welcomeStep] = steps.filter(item => item.id == 'welcome')
   const dialog = await screen.findByRole('dialog')
   await checkVisible(dialog)
   // check content inside widget dialog
-  await checkMessagesOfStep(step0)
-  const startButton = await form.findButton(screen, step0.buttons[0].text)
+  await checkMessagesOfStep(welcomeStep)
+  const startButton = await form.findButton(screen, welcomeStep.buttons[0].text)
   await checkVisible(startButton)
   // close widget dialog
   await form.closeWidget(screen, user, closeButtonName)
-  const buttons = await screen.queryAllByText(step0.buttons[0].text)
+  const buttons = await screen.queryAllByText(welcomeStep.buttons[0].text)
   // check state after closing of bot window
   await waitFor(() => {
     expect(buttons).toHaveLength(0)
@@ -104,24 +104,24 @@ test('positive test - fill in form, submit, open widget, close widget, press bac
   })
   // open bot window
   await resultPage.openWidget(screen, user, widgetButtonName)
-  const [step0] = steps.filter(item => item.id == 'welcome')
+  const [welcomeStep] = steps.filter(item => item.id == 'welcome')
   const dialog = await screen.findByRole('dialog')
   await checkVisible(dialog)
-  await checkMessagesOfStep(step0)
+  await checkMessagesOfStep(welcomeStep)
   // click button inside widget
-  await resultPage.clickButton(screen, user, step0.buttons[0].text)
-  const paragraphs = await screen.findAllByText(step0.buttons[0].text)
+  await resultPage.clickButton(screen, user, welcomeStep.buttons[0].text)
+  const paragraphs = await screen.findAllByText(welcomeStep.buttons[0].text)
   await waitFor(() => {
     // check: button was replaced by text message after click
     expect(paragraphs).toHaveLength(1)
     expect(paragraphs[0].tagName).toBe('P')
   })
-  const [step1] = steps.filter(item => item.id == step0.buttons[0].nextStepId)
+  const [startStep] = steps.filter(item => item.id == welcomeStep.buttons[0].nextStepId)
   // check: after clicking elements appeared with role Button
-  await checkButtonsOfStep(step1, resultPage)
+  await checkButtonsOfStep(startStep, resultPage, screen)
   // close widget
   await resultPage.closeWidget(screen, user, closeButtonName)
-  const buttons = await screen.queryAllByText(step0.buttons[0].text)
+  const buttons = await screen.queryAllByText(welcomeStep.buttons[0].text)
   await waitFor(() => {
     expect(buttons).toHaveLength(0)
   })

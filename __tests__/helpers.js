@@ -1,4 +1,4 @@
-import { screen, waitFor } from '@testing-library/react'
+import { waitFor } from '@testing-library/react'
 import { expect } from 'vitest'
 
 const checkVisible = async (el) => {
@@ -6,14 +6,13 @@ const checkVisible = async (el) => {
   await waitFor(() => {
     expect(el).toBeVisible()
     expect(el).toBeInTheDocument()
-    // expect(el).not.toHaveStyle({ display: 'none' })
   })
 }
 
-const checkButtonsOfStep = async (step, pageObject) => {
+const checkButtonsOfStep = async (step, pageObject, screen) => {
   step.buttons.forEach(async (button) => {
     // check: after clicking elements appeared with role Button
-    const buttonEl = await pageObject.findButton(screen, button.text)
+    const buttonEl = await screen.findByRole('button', { name: button.text })
     await checkVisible(buttonEl)
   })
 }
