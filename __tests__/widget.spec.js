@@ -5,7 +5,7 @@ import { test, expect, beforeEach, afterEach, vi } from 'vitest'
 
 import Widget from '@hexlet/chatbot-v2'
 import steps from '../__fixtures__/steps.js'
-import { onlyWidget } from './pages.js'
+import { WidgetWindow } from './pages/WidgetWindow.js'
 import { checkVisible, checkButtonsOfStep, checkMessagesOfStep } from './helpers.js'
 
 const scrollIntoViewMock = vi.fn()
@@ -24,7 +24,7 @@ test('positive test - initialize', async () => {
   // init - start
   render(Widget(steps))
   const user = userEvent.setup()
-  const widget = new onlyWidget()
+  const widget = new WidgetWindow()
   await widget.openWidget(screen, user, widgetButtonName)
   // init - finish
   const [step0] = steps.filter(item => item.id == 'welcome')
@@ -41,7 +41,7 @@ test('positive test - close dialog', async () => {
   // init - start
   render(Widget(steps))
   const user = userEvent.setup()
-  const widget = new onlyWidget()
+  const widget = new WidgetWindow()
   await widget.openWidget(screen, user, widgetButtonName)
   // init - finish
   const [step0] = steps.filter(item => item.id == 'welcome')
@@ -56,7 +56,7 @@ test('positive test - several steps', async () => {
   // init - start
   render(Widget(steps))
   const user = userEvent.setup()
-  const widget = new onlyWidget()
+  const widget = new WidgetWindow()
   await widget.openWidget(screen, user, widgetButtonName)
   // init - finish
   const [step0] = steps.filter(item => item.id == 'welcome')
@@ -88,7 +88,7 @@ test('positive test - scroll', async () => {
   // init - start
   render(Widget(steps))
   const user = userEvent.setup()
-  const widget = new onlyWidget()
+  const widget = new WidgetWindow()
   await widget.openWidget(screen, user, widgetButtonName)
   // init - finish
   const [step0] = steps.filter(item => item.id == 'welcome')
@@ -110,7 +110,7 @@ test('positive test - focus on button', async () => {
   // init - start
   render(Widget(steps))
   const user = userEvent.setup()
-  const widget = new onlyWidget()
+  const widget = new WidgetWindow()
   await widget.openWidget(screen, user, widgetButtonName)
   // init - finish
   const [step0] = steps.filter(item => item.id == 'welcome')

@@ -4,7 +4,7 @@ import userEvent from '@testing-library/user-event'
 import { test, expect, beforeEach, afterEach, vi } from 'vitest'
 import App from '../src/App.jsx'
 import steps from '../__fixtures__/steps.js'
-import { InputForm, ResultPage } from './pages.js'
+import { InputForm, ResultPage } from './pages/App.js'
 import { checkVisible, checkButtonsOfStep, checkMessagesOfStep } from './helpers.js'
 
 const scrollIntoViewMock = vi.fn()

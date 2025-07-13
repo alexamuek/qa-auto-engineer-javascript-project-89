@@ -1,30 +1,8 @@
+import { WidgetWindow } from './WidgetWindow.js'
+
 const backButtonName = 'Назад'
 
-export class onlyWidget {
-  constructor() {}
-
-  async findButton(screen, label) {
-    const button = await screen.findByRole('button', { name: label })
-    return button
-  }
-
-  async clickButton(screen, user, label) {
-    const button = await this.findButton(screen, label)
-    await user.click(button)
-  }
-
-  async openWidget(screen, user, widgetButtonName) {
-    const button = await screen.findByRole('button', { name: widgetButtonName })
-    await user.click(button)
-  }
-
-  async closeWidget(screen, user, closeButtonName) {
-    const button = await screen.findByRole('button', { name: closeButtonName })
-    await user.click(button)
-  }
-}
-
-export class InputForm extends onlyWidget {
+export class InputForm extends WidgetWindow {
   constructor() {
     super()
   }
@@ -54,7 +32,7 @@ export class InputForm extends onlyWidget {
   }
 }
 
-export class ResultPage extends onlyWidget {
+export class ResultPage extends WidgetWindow {
   constructor() {
     super()
   }

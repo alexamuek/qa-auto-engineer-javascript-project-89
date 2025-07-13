@@ -15,7 +15,7 @@ import Steps7 from '../__fixtures__/errorSteps7.js'
 import Steps8 from '../__fixtures__/errorSteps8.js'
 import Steps9 from '../__fixtures__/errorSteps9.js'
 
-import { onlyWidget } from './pages.js'
+import { WidgetWindow } from './pages/WidgetWindow.js'
 import { checkVisible } from './helpers.js'
 
 const scrollIntoViewMock = vi.fn()
@@ -33,7 +33,7 @@ test('1 - negative test - no message, no button property', async () => {
   // init - start
   render(Widget(Steps1))
   const user = userEvent.setup()
-  const widget = new onlyWidget()
+  const widget = new WidgetWindow()
   await widget.openWidget(screen, user, widgetButtonName)
   // init - finish
   const [step0] = Steps1.filter(item => item.id == 'welcome')
@@ -50,7 +50,7 @@ test('2 - negative test - empty message array, empty button array', async () => 
   // init - start
   render(Widget(Steps2))
   const user = userEvent.setup()
-  const widget = new onlyWidget()
+  const widget = new WidgetWindow()
   await widget.openWidget(screen, user, widgetButtonName)
   // init - finish
   const dialog = await screen.findByRole('dialog')
@@ -79,7 +79,7 @@ test('3 - negative test - link to non-existed step Start', async () => {
   // init - start
   render(Widget(Steps3))
   const user = userEvent.setup()
-  const widget = new onlyWidget()
+  const widget = new WidgetWindow()
   await widget.openWidget(screen, user, widgetButtonName)
   // init - finish
   const dialog = await screen.findByRole('dialog')
@@ -98,7 +98,7 @@ test('4 - negative test - nextStepId links to itself', async () => {
   // init - start
   render(Widget(Steps4))
   const user = userEvent.setup()
-  const widget = new onlyWidget()
+  const widget = new WidgetWindow()
   await widget.openWidget(screen, user, widgetButtonName)
   // init - finish
   const dialog = await screen.findByRole('dialog')
@@ -121,7 +121,7 @@ test('5 - negative test - button object doesn\'t have text property', async () =
   // init - start
   render(Widget(Steps5))
   const user = userEvent.setup()
-  const widget = new onlyWidget()
+  const widget = new WidgetWindow()
   await widget.openWidget(screen, user, widgetButtonName)
   // init - finish
   const dialog = await screen.findByRole('dialog')
@@ -146,7 +146,7 @@ test('6 - negative test - button object doesn\'t have nextStepId property', asyn
   // init - start
   render(Widget(Steps6))
   const user = userEvent.setup()
-  const widget = new onlyWidget()
+  const widget = new WidgetWindow()
   await widget.openWidget(screen, user, widgetButtonName)
   // init - finish
   const dialog = await screen.findByRole('dialog')
@@ -169,7 +169,7 @@ test('7 - negative test - button object doesn\'t have Type property', async () =
   // init - start
   render(Widget(Steps7))
   const user = userEvent.setup()
-  const widget = new onlyWidget()
+  const widget = new WidgetWindow()
   await widget.openWidget(screen, user, widgetButtonName)
   // init - finish
   const dialog = await screen.findByRole('dialog')
@@ -188,7 +188,7 @@ test('8 - negative test - wrong type of button', async () => {
   // init - start
   render(Widget(Steps8))
   const user = userEvent.setup()
-  const widget = new onlyWidget()
+  const widget = new WidgetWindow()
   await widget.openWidget(screen, user, widgetButtonName)
   // init - finish
   const dialog = await screen.findByRole('dialog')
@@ -207,7 +207,7 @@ test('9 - negative test - next step doesn\'t have id', async () => {
   // init - start
   render(Widget(Steps9))
   const user = userEvent.setup()
-  const widget = new onlyWidget()
+  const widget = new WidgetWindow()
   await widget.openWidget(screen, user, widgetButtonName)
   // init - finish
   const dialog = await screen.findByRole('dialog')
