@@ -1,7 +1,7 @@
 import { render, screen, waitFor, fireEvent, cleanup } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { test, expect, beforeEach, afterEach, vi } from 'vitest'
-import { debug } from 'vitest-preview'
+// import { debug } from 'vitest-preview'
 
 import Widget from '@hexlet/chatbot-v2'
 import steps from '../__fixtures__/steps.js'
