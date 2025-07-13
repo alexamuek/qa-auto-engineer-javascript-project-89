@@ -1,5 +1,5 @@
 // import React from 'react'
-import { render, screen, waitFor, cleanup } from '@testing-library/react'
+import { screen, cleanup } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { test, expect, beforeEach, afterEach, vi } from 'vitest'
 import steps from '../__fixtures__/steps.js'
@@ -43,7 +43,7 @@ test('positive test - fill in form, open widget, close widget', async () => {
   formEls.forEach(async (item) => {
     checkVisibleSync(item)
   })
-  expect(countryInput).toHaveValue(country);
+  expect(countryInput).toHaveValue(country)
   expect(checkbox).toBeChecked()
   // open bot window
   await form.openWidget(screen, user, widgetButtonName)
