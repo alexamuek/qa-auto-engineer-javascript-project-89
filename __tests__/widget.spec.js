@@ -14,16 +14,6 @@ afterEach(() => {
 })
 
 describe('Widget pass cases', () => {
-  test('positive test - close dialog', async () => {
-    WidgetWindow.renderWidget(steps)
-    WidgetWindow.openWidget()
-    WidgetWindow.expectModalTitle()
-    WidgetWindow.closeWidget()
-    await WidgetWindow.waitForModalToClose()
-    const [welcomeStep] = steps.filter(item => item.id == 'welcome')
-    expect(WidgetWindow.findElByLabel(welcomeStep.buttons[0].text)).toHaveLength(0)
-  })
-
   test('positive test - initialize', async () => {
     // init - start
     WidgetWindow.renderWidget(steps)
@@ -37,5 +27,14 @@ describe('Widget pass cases', () => {
     // check: after clicking elements appeared with role Button
     WidgetWindow.waitForButtonsOfStep(welcomeStep)
   })
-
+  
+  test('positive test - close dialog', async () => {
+    WidgetWindow.renderWidget(steps)
+    WidgetWindow.openWidget()
+    WidgetWindow.expectModalTitle()
+    WidgetWindow.closeWidget()
+    await WidgetWindow.waitForModalToClose()
+    const [welcomeStep] = steps.filter(item => item.id == 'welcome')
+    expect(WidgetWindow.findElByLabel(welcomeStep.buttons[0].text)).toHaveLength(0)
+  })
 })
