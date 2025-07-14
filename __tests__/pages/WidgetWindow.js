@@ -1,30 +1,69 @@
-import { render } from '@testing-library/react'
+import { expect } from 'vitest'
+import { screen, render, fireEvent, waitFor } from '@testing-library/react'
 import Widget from '@hexlet/chatbot-v2'
+import { startButtonText, closeButtonLabel, modalTitleText } from '../utils/constants'
 
 export class WidgetWindow {
-  constructor() {}
-
   static renderWidget(steps) {
     render(Widget(steps))
   }
 
-  async findButton(screen, label) {
-    const button = await screen.findByRole('button', { name: label })
-    return button
+  static get startButton() {
+    return screen.getByText(startButtonText)
   }
 
-  async clickButton(screen, user, label) {
-    const button = await this.findButton(screen, label)
-    await user.click(button)
+  static get closeButton() {
+    return screen.queryByRole('button', { name: closeButtonLabel })
   }
 
-  async openWidget(screen, user, widgetButtonName) {
-    const button = await screen.findByRole('button', { name: widgetButtonName })
-    user.click(button)
+  static dialog() {
+    return screen.getByRole('dialog')
   }
 
-  async closeWidget(screen, user, closeButtonName) {
-    const button = await screen.findByRole('button', { name: closeButtonName })
-    await user.click(button)
+  static findElByLabel(label) {
+    return screen.queryAllByText(label)
   }
+
+  static openWidget() {
+    fireEvent.click(this.startButton)
+  }
+
+  static waitForModalToClose() {
+    return waitFor(() => {
+      expect(screen.queryByText(modalTitleText)).not.toBeInTheDocument()
+    })
+  }
+
+  static checkVisible(el) {
+    expect(el).toBeVisible()
+    expect(el).toBeInTheDocument()
+  }
+
+  static waitForButtonsOfStep(step) {
+    step.buttons.forEach((button) => {
+      // check: after clicking elements appeared with role Button
+      const buttonEl = screen.getByRole('button', { name: button.text })
+      this.checkVisible(buttonEl)
+    })
+  }
+
+  static waitForMessagesOfStep(step) {
+    step.messages.forEach((message) => {
+      expect(document.body).toHaveTextContent(message)
+    })
+  }
+
+
+
+  static expectModalTitle() {
+    expect(screen.queryByText(modalTitleText)).toBeInTheDocument()
+  }
+
+  static closeWidget() {
+    fireEvent.click(this.closeButton)
+  }
+
 }
+
+
+

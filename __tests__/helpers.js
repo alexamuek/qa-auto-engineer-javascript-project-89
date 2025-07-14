@@ -13,7 +13,7 @@ const checkVisibleSync = (el) => {
   expect(el).toBeInTheDocument()
 }
 
-const checkButtonsOfStep = async (step, pageObject, screen) => {
+const checkButtonsOfStep = async (step, screen) => {
   await waitFor (() => {
     step.buttons.forEach(async (button) => {
       // check: after clicking elements appeared with role Button

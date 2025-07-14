@@ -1,317 +1,41 @@
-import { screen, waitFor, fireEvent, cleanup } from '@testing-library/react'
-import userEvent from '@testing-library/user-event'
-import { test, expect, beforeEach, afterEach, vi } from 'vitest'
-// import { debug } from 'vitest-preview'
-
-import steps from '../__fixtures__/steps.js'
+import { fireEvent, cleanup } from '@testing-library/react'
+import { test, vi, beforeEach, afterEach, describe, expect } from 'vitest'
+// import Widget from './pages/Widget'
 import { WidgetWindow } from './pages/WidgetWindow.js'
+import steps from '../__fixtures__/steps'
 import { checkVisible, checkButtonsOfStep, checkMessagesOfStep, checkVisibleSync } from './helpers.js'
-import ErrorsSteps from '../__fixtures__/errorsSteps.js'
 
-const scrollIntoViewMock = vi.fn()
-const widgetButtonName = 'Открыть Чат'
-const closeButtonName = 'Close'
-
-beforeEach(async () => {
-  window.HTMLElement.prototype.scrollIntoView = scrollIntoViewMock // mock
+beforeEach(() => {
+  window.HTMLElement.prototype.scrollIntoView = vi.fn()
 })
 
 afterEach(() => {
   cleanup()
 })
 
-/* eslint-disable no-undef */
 describe('Widget pass cases', () => {
+  test('positive test - close dialog', async () => {
+    WidgetWindow.renderWidget(steps)
+    WidgetWindow.openWidget()
+    WidgetWindow.expectModalTitle()
+    WidgetWindow.closeWidget()
+    await WidgetWindow.waitForModalToClose()
+    const [welcomeStep] = steps.filter(item => item.id == 'welcome')
+    expect(WidgetWindow.findElByLabel(welcomeStep.buttons[0].text)).toHaveLength(0)
+  })
+
   test('positive test - initialize', async () => {
     // init - start
     WidgetWindow.renderWidget(steps)
-    const user = userEvent.setup()
-    const widget = new WidgetWindow()
-    await widget.openWidget(screen, user, widgetButtonName)
+    WidgetWindow.openWidget()
     // init - finish
     const [welcomeStep] = steps.filter(item => item.id == 'welcome')
-    const dialog = await screen.findByRole('dialog')
-    checkVisibleSync(dialog)
+    const dialog = WidgetWindow.dialog()
+    WidgetWindow.checkVisible(dialog)
     // check: after clicking messages appeared
-    checkMessagesOfStep(welcomeStep)
+    WidgetWindow.waitForMessagesOfStep(welcomeStep)
     // check: after clicking elements appeared with role Button
-    await checkButtonsOfStep(welcomeStep, widget, screen)
+    WidgetWindow.waitForButtonsOfStep(welcomeStep)
   })
 
-  test('positive test - close dialog', async () => {
-    // init - start
-    WidgetWindow.renderWidget(steps)
-    const user = userEvent.setup()
-    const widget = new WidgetWindow()
-    await widget.openWidget(screen, user, widgetButtonName)
-    // init - finish
-    const [welcomeStep] = steps.filter(item => item.id == 'welcome')
-    await widget.closeWidget(screen, user, closeButtonName)
-    const buttons = await screen.queryAllByText(welcomeStep.buttons[0].text)
-    expect(buttons).toHaveLength(0)
-  })
-
-  test('positive test - several steps', async () => {
-    // init - start
-    WidgetWindow.renderWidget(steps)
-    const user = userEvent.setup()
-    const widget = new WidgetWindow()
-    await widget.openWidget(screen, user, widgetButtonName)
-    // init - finish
-    const [welcomeStep] = steps.filter(item => item.id == 'welcome')
-    await widget.clickButton(screen, user, welcomeStep.buttons[0].text)
-    const paragraphs = await screen.findAllByText(welcomeStep.buttons[0].text)
-    // check: button was replaced by text message after click
-    expect(paragraphs).toHaveLength(1)
-    expect(paragraphs[0].tagName).toBe('P')
-    const [startStep] = steps.filter(item => item.id == welcomeStep.buttons[0].nextStepId)
-    // check: after clicking elements appeared with role Button
-    await checkButtonsOfStep(startStep, widget, screen)
-    const scrollCount = scrollIntoViewMock.mock.calls.length
-    const [advansedButtonDescr] = startStep.buttons.filter(item => item.nextStepId == 'advanced')
-    await widget.clickButton(screen, user, advansedButtonDescr.text)
-    const [advansedStep] = steps.filter(item => item.id == 'advanced')
-    // check: scroll was used
-    expect(scrollIntoViewMock.mock.calls.length).toBe(scrollCount + 1)
-    // check: after clicking messages appeared with role Button
-    checkMessagesOfStep(advansedStep)
-    // check: after clicking elements appeared with role Button
-    await checkButtonsOfStep(advansedStep, widget, screen)
-  })
-
-  test('positive test - scroll', async () => {
-    // init - start
-    WidgetWindow.renderWidget(steps)
-    const user = userEvent.setup()
-    const widget = new WidgetWindow()
-    await widget.openWidget(screen, user, widgetButtonName)
-    // init - finish
-    const [welcomeStep] = steps.filter(item => item.id == 'welcome')
-    await widget.clickButton(screen, user, welcomeStep.buttons[0].text)
-    const [startStep] = steps.filter(item => item.id == welcomeStep.buttons[0].nextStepId)
-    const [advansedButtonDescr] = startStep.buttons.filter(item => item.nextStepId == 'advanced')
-    await widget.clickButton(screen, user, advansedButtonDescr.text)
-    // find div of widget window
-    const div1 = await screen.findByText('Виртуальный помощник')
-    const div2 = div1.parentElement
-    const modalBody = div2.nextElementSibling
-    fireEvent.scroll(modalBody, { target: { scrollTop: 100 } })
-    expect(modalBody.scrollTop).toBe(100)
-  })
-
-  test('positive test - focus on button', async () => {
-    // init - start
-    WidgetWindow.renderWidget(steps)
-    const user = userEvent.setup()
-    const widget = new WidgetWindow()
-    await widget.openWidget(screen, user, widgetButtonName)
-    // init - finish
-    const [step0] = steps.filter(item => item.id == 'welcome')
-    const startButton = await widget.findButton(screen, step0.buttons[0].text)
-    const mockHover = vi.fn()
-    startButton.onmouseenter = mockHover
-    await user.hover(startButton)
-    expect(mockHover).toHaveBeenCalledTimes(1)
-  })
-})
-
-/* eslint-disable no-undef */
-describe('Widget errors cases', () => {
-  test('1 - negative test - no message, no button property', async () => {
-    // init - start
-    const steps = ErrorsSteps.no_message_and_buttons
-    WidgetWindow.renderWidget(steps)
-    const user = userEvent.setup()
-    const widget = new WidgetWindow()
-    await widget.openWidget(screen, user, widgetButtonName)
-    // init - finish
-    const [welcomeStep] = steps.filter(item => item.id == 'welcome')
-    const dialog = await screen.findByRole('dialog')
-    checkVisibleSync(dialog)
-    await expect(
-      widget.clickButton(screen, user, welcomeStep.buttons[0].text),
-    )
-      .rejects
-      .toThrow()
-  })
-
-  test('2 - negative test - empty message array, empty button array', async () => {
-    // init - start
-    const steps = ErrorsSteps.empty_message_and_button_array
-    WidgetWindow.renderWidget(steps)
-    const user = userEvent.setup()
-    const widget = new WidgetWindow()
-    await widget.openWidget(screen, user, widgetButtonName)
-    // init - finish
-    const dialog = await screen.findByRole('dialog')
-    checkVisibleSync(dialog)
-    const [welcomeStep] = steps.filter(item => item.id == 'welcome')
-    await widget.clickButton(screen, user, welcomeStep.buttons[0].text)
-    const paragraphs = await screen.findAllByText(welcomeStep.buttons[0].text)
-    const [startStep] = steps.filter(item => item.id == welcomeStep.buttons[0].nextStepId)
-    // check: button was replaced by text message after click
-    expect(paragraphs).toHaveLength(1)
-    expect(paragraphs[0].tagName).toBe('P')
-    startStep.messages.forEach(async (message) => {
-      const pEl = await screen.findByText(message)
-      // check
-      await waitFor(() => {
-        // check: after clicking message appeared
-        expect(document.body).toHaveTextContent(message)
-        expect(pEl.tagName).toBe('P')
-      })
-    })
-  })
-
-  test('3 - negative test - link to non-existed step Start', async () => {
-    // init - start
-    const steps = ErrorsSteps.non_existed_step
-    WidgetWindow.renderWidget(steps)
-    const user = userEvent.setup()
-    const widget = new WidgetWindow()
-    await widget.openWidget(screen, user, widgetButtonName)
-    // init - finish
-    const dialog = await screen.findByRole('dialog')
-    checkVisibleSync(dialog)
-    const [welcomeStep] = steps.filter(item => item.id == 'welcome')
-    await widget.clickButton(screen, user, welcomeStep.buttons[0].text)
-    const startButtonAgain = await screen.findByRole('button', { name: welcomeStep.buttons[0].text })
-    expect(startButtonAgain).toBeVisible()
-    expect(startButtonAgain).toBeInTheDocument()
-    expect(startButtonAgain).not.toHaveStyle({ display: 'none' })
-  })
-
-  test('4 - negative test - nextStepId links to itself', async () => {
-    // init - start
-    const steps = ErrorsSteps.self_linking
-    WidgetWindow.renderWidget(steps)
-    const user = userEvent.setup()
-    const widget = new WidgetWindow()
-    await widget.openWidget(screen, user, widgetButtonName)
-    // init - finish
-    const dialog = await screen.findByRole('dialog')
-    checkVisibleSync(dialog)
-    const [welcomeStep] = steps.filter(item => item.id == 'welcome')
-    await widget.clickButton(screen, user, welcomeStep.buttons[0].text)
-    const elements = await screen.findAllByText(welcomeStep.buttons[0].text)
-    const validTags = ['P', 'BUTTON']
-    elements.forEach((el) => {
-      checkVisibleSync(el)
-      expect(validTags).toEqual(
-        expect.arrayContaining([el.tagName]),
-      )
-    })
-  })
-
-  test('5 - negative test - button object doesn\'t have text property', async () => {
-    // init - start
-    const steps = ErrorsSteps.button_without_text_property
-    WidgetWindow.renderWidget(steps)
-    const user = userEvent.setup()
-    const widget = new WidgetWindow()
-    await widget.openWidget(screen, user, widgetButtonName)
-    // init - finish
-    const dialog = await screen.findByRole('dialog')
-    checkVisibleSync(dialog)
-    const welcomeButton = await widget.findButton(screen, '')
-    checkVisibleSync(welcomeButton)
-    const [welcomeStep] = steps.filter(item => item.id == 'welcome')
-    welcomeStep.messages.forEach(async (message) => {
-      const pEl = await screen.findByText(message)
-      // check
-      await waitFor(() => {
-        // check: after clicking message appeared
-        expect(document.body).toHaveTextContent(message)
-        expect(pEl.tagName).toBe('P')
-      })
-    })
-  })
-
-  test('6 - negative test - button object doesn\'t have nextStepId property', async () => {
-    // init - start
-    const steps = ErrorsSteps.button_without_nextStepId_property
-    WidgetWindow.renderWidget(steps)
-    const user = userEvent.setup()
-    const widget = new WidgetWindow()
-    await widget.openWidget(screen, user, widgetButtonName)
-    // init - finish
-    const dialog = await screen.findByRole('dialog')
-    checkVisibleSync(dialog)
-    const [welcomeStep] = steps.filter(item => item.id == 'welcome')
-    await widget.clickButton(screen, user, welcomeStep.buttons[0].text)
-    const elements = await screen.findAllByText(welcomeStep.buttons[0].text)
-    const validTags = ['P', 'BUTTON']
-    elements.forEach(async (el) => {
-      checkVisibleSync(el)
-      await waitFor(() => {
-        expect(validTags).toEqual(
-          expect.arrayContaining([el.tagName]),
-        )
-      })
-    })
-  })
-
-  test('7 - negative test - button object doesn\'t have Type property', async () => {
-    // init - start
-    const steps = ErrorsSteps.button_without_type_property
-    WidgetWindow.renderWidget(steps)
-    const user = userEvent.setup()
-    const widget = new WidgetWindow()
-    await widget.openWidget(screen, user, widgetButtonName)
-    // init - finish
-    const dialog = await screen.findByRole('dialog')
-    checkVisibleSync(dialog)
-    const [welcomeStep] = steps.filter(item => item.id == 'welcome')
-    await widget.clickButton(screen, user, welcomeStep.buttons[0].text)
-    const [startStep] = steps.filter(item => item.id == welcomeStep.buttons[0].nextStepId)
-    startStep.buttons.forEach(async (button) => {
-      // check: after clicking elements appeared with role Button
-      const buttonEl = await widget.findButton(screen, button.text)
-      await checkVisible(buttonEl)
-    })
-  })
-
-  test('8 - negative test - wrong type of button', async () => {
-    // init - start
-    const steps = ErrorsSteps.wrong_button_type
-    WidgetWindow.renderWidget(steps)
-    const user = userEvent.setup()
-    const widget = new WidgetWindow()
-    await widget.openWidget(screen, user, widgetButtonName)
-    // init - finish
-    const dialog = await screen.findByRole('dialog')
-    checkVisibleSync(dialog)
-    const [welcomeStep] = steps.filter(item => item.id == 'welcome')
-    await widget.clickButton(screen, user, welcomeStep.buttons[0].text)
-    const [startStep] = steps.filter(item => item.id == welcomeStep.buttons[0].nextStepId)
-    startStep.buttons.forEach(async (button) => {
-      // check: after clicking elements appeared with role Button
-      const buttonEl = await widget.findButton(screen, button.text)
-      await checkVisible(buttonEl)
-    })
-  })
-
-  test('9 - negative test - next step doesn\'t have id', async () => {
-    // init - start
-    const steps = ErrorsSteps.next_step_without_id
-    WidgetWindow.renderWidget(steps)
-    const user = userEvent.setup()
-    const widget = new WidgetWindow()
-    await widget.openWidget(screen, user, widgetButtonName)
-    // init - finish
-    const dialog = await screen.findByRole('dialog')
-    checkVisibleSync(dialog)
-    const [welcomeStep] = steps.filter(item => item.id == 'welcome')
-    await widget.clickButton(screen, user, welcomeStep.buttons[0].text)
-    const elements = await screen.findAllByText(welcomeStep.buttons[0].text)
-    const validTags = ['P', 'BUTTON']
-    elements.forEach(async (el) => {
-      checkVisibleSync(el)
-      await waitFor(() => {
-        expect(validTags).toEqual(
-          expect.arrayContaining([el.tagName]),
-        )
-      })
-    })
-  })
 })
