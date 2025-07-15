@@ -1,5 +1,6 @@
 import { expect } from 'vitest'
 import { screen, render, fireEvent, waitFor } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
 import Widget from '@hexlet/chatbot-v2'
 import { startButtonText, closeButtonLabel, modalTitleText } from '../utils/constants'
 
@@ -20,12 +21,32 @@ export class WidgetWindow {
     return screen.getByRole('dialog')
   }
 
+  static findAllElByLabel(label) {
+    return screen.queryAllByText(label)
+  }
+
   static findElByLabel(label) {
+    return screen.getByLabelText(label)
+  }
+
+  static findElByText(label) {
+    return screen.queryByText(label)
+  }
+
+  static findButton(buttonName) {
+    return screen.getByRole('button', { name: buttonName })
+  }
+
+  static findAllByText(label) {
     return screen.queryAllByText(label)
   }
 
   static openWidget() {
     fireEvent.click(this.startButton)
+  }
+
+  static async clickButton(buttonName) {
+    await fireEvent.click(this.findButton(buttonName))
   }
 
   static waitForModalToClose() {
@@ -53,8 +74,6 @@ export class WidgetWindow {
     })
   }
 
-
-
   static expectModalTitle() {
     expect(screen.queryByText(modalTitleText)).toBeInTheDocument()
   }
@@ -63,7 +82,12 @@ export class WidgetWindow {
     fireEvent.click(this.closeButton)
   }
 
+  static scroll(el, targetValue) {
+    fireEvent.scroll(el, { target: { scrollTop: targetValue } })
+  }
+
+  static async hover(el) {
+    const user = userEvent.setup()
+    await user.hover(el)
+  }
 }
-
-
-
