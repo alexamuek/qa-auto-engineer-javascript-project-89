@@ -7,6 +7,7 @@ const scrollIntoViewMock = vi.fn()
 
 beforeEach(async () => {
   window.HTMLElement.prototype.scrollIntoView = scrollIntoViewMock // mock
+  AppPage.renderApp()
 })
 
 afterEach(() => {
@@ -16,13 +17,11 @@ afterEach(() => {
 /* eslint-disable no-undef */
 describe('Integrate positive cases', () => {
   test('initialize app with widget', async () => {
-    AppPage.renderApp()
     AppPage.waitForForm()
     AppPage.waitForWidgetButton()
   })
 
   test('open and close modal window', async () => {
-    AppPage.renderApp()
     AppPage.openWidget()
     AppPage.expectModalTitle()
     AppPage.closeWidget()
@@ -30,14 +29,12 @@ describe('Integrate positive cases', () => {
   })
 
   test('form input fields are functional', () => {
-    AppPage.renderApp()
     AppPage.fillOutForm()
     AppPage.registry()
     AppPage.waitForResultTable()
   })
 
   test('fill out form, open widget, close widget', () => {
-    AppPage.renderApp()
     AppPage.fillOutForm()
     AppPage.openWidget()
     AppPage.waitForWidgetContent()
@@ -46,7 +43,6 @@ describe('Integrate positive cases', () => {
   })
 
   test('fill out form, submit, open widget, close widget, press back', async () => {
-    AppPage.renderApp()
     AppPage.fillOutForm()
     AppPage.registry()
     AppPage.openWidget()

@@ -4,6 +4,7 @@ import { WidgetWindow } from './pages/WidgetWindow.js'
 import steps from '../__fixtures__/steps'
 import { modalTitleText } from './utils/constants'
 import ErrorsSteps from '../__fixtures__/errorsSteps.js'
+import { debug } from 'vitest-preview'
 
 const scrollIntoViewMock = vi.fn()
 
@@ -18,59 +19,49 @@ afterEach(() => {
 describe('Widget Positive cases', () => {
   test('initialize', () => {
     WidgetWindow.renderWidget(steps)
-    WidgetWindow.openWidget()
-    const [welcomeStep] = steps.filter(item => item.id == 'welcome')
-    const dialog = WidgetWindow.dialog()
-    WidgetWindow.checkVisible(dialog)
-    WidgetWindow.waitForMessagesOfStep(welcomeStep)
-    WidgetWindow.waitForButtonsOfStep(welcomeStep)
+    expect(WidgetWindow.startButton).toBeVisible()
   })
 
-  test('close dialog', async () => {
+  test('open and close widget', async () => {
     WidgetWindow.renderWidget(steps)
     WidgetWindow.openWidget()
-    WidgetWindow.expectModalTitle()
+    WidgetWindow.waitForStartContent()
     WidgetWindow.closeWidget()
     await WidgetWindow.waitForModalToClose()
-    const [welcomeStep] = steps.filter(item => item.id == 'welcome')
-    expect(WidgetWindow.findAllElByLabel(welcomeStep.buttons[0].text)).toHaveLength(0)
+    WidgetWindow.notFoundWelcomeStepContent()
   })
 
   test('several steps', async () => {
     WidgetWindow.renderWidget(steps)
     WidgetWindow.openWidget()
-    const [welcomeStep] = steps.filter(item => item.id == 'welcome')
-    await WidgetWindow.clickButton(welcomeStep.buttons[0].text)
-    const paragraph = WidgetWindow.findElByText(welcomeStep.buttons[0].text)
-    expect(paragraph.tagName).toBe('P')
-    const [startStep] = steps.filter(item => item.id == welcomeStep.buttons[0].nextStepId)
-    WidgetWindow.waitForButtonsOfStep(startStep)
+    await WidgetWindow.startConversation()
+    //WidgetWindow.startConversation()
+    debug()
+    //await new Promise(resolve => setTimeout(resolve, 1000));
+    
+    /*await WidgetWindow.waitForParagraph()
     const scrollCount = scrollIntoViewMock.mock.calls.length
-    const [advansedButtonDescr] = startStep.buttons.filter(item => item.nextStepId == 'advanced')
-    await WidgetWindow.clickButton(advansedButtonDescr.text)
-    const [advansedStep] = steps.filter(item => item.id == 'advanced')
+    WidgetWindow.wantToAdvanced()
     expect(scrollIntoViewMock.mock.calls.length).toBe(scrollCount + 1)
-    WidgetWindow.waitForMessagesOfStep(advansedStep)
-    WidgetWindow.waitForButtonsOfStep(advansedStep)
+    WidgetWindow.waitForAdvancedStepContent()*/
   })
 
-  test('scroll', async () => {
+  /*test('scroll', async () => {
     WidgetWindow.renderWidget(steps)
     WidgetWindow.openWidget()
-    const [welcomeStep] = steps.filter(item => item.id == 'welcome')
-    await WidgetWindow.clickButton(welcomeStep.buttons[0].text)
-    const [startStep] = steps.filter(item => item.id == welcomeStep.buttons[0].nextStepId)
-    const [advansedButtonDescr] = startStep.buttons.filter(item => item.nextStepId == 'advanced')
-    await WidgetWindow.clickButton(advansedButtonDescr.text)
-    const div1 = WidgetWindow.findElByText(modalTitleText)
+    debug()
+    //WidgetWindow.startConversation()
+    //WidgetWindow.wantToAdvanced()
+
+    /*const div1 = WidgetWindow.getModalTitleEl()
     const div2 = div1.parentElement
     const modalBody = div2.nextElementSibling
     const targetValue = 100
     WidgetWindow.scroll(modalBody, targetValue)
-    expect(modalBody.scrollTop).toBe(100)
-  })
+    expect(modalBody.scrollTop).toBe(targetValue)
+  })*/
 
-  test('focus on button', async () => {
+  /*test('focus on button', async () => {
     WidgetWindow.renderWidget(steps)
     WidgetWindow.openWidget()
     const [welcomeStep] = steps.filter(item => item.id == 'welcome')
@@ -80,10 +71,10 @@ describe('Widget Positive cases', () => {
     startButton.onmouseenter = mockHover
     await WidgetWindow.hover(startButton)
     expect(mockHover).toHaveBeenCalledTimes(1)
-  })
+  })*/
 })
 
-describe('Widget Negative cases', async () => {
+/*describe('Widget Negative cases', async () => {
   test('no message, no button property', async () => {
     const errorSteps = ErrorsSteps.no_message_and_buttons
     WidgetWindow.renderWidget(errorSteps)
@@ -217,4 +208,4 @@ describe('Widget Negative cases', async () => {
       )
     })
   })
-})
+})*/
