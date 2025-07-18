@@ -65,7 +65,6 @@ export class WidgetWindow {
   static notFoundWelcomeStepContent() {
     const [welcomeStep] = steps.filter(step => step.id = 'welcome')
     welcomeStep.buttons.forEach((button) => {
-      console.log(button.text)
       const buttonEls = screen.queryAllByText(button.text)
       expect(buttonEls).toHaveLength(0)
     })
@@ -85,10 +84,17 @@ export class WidgetWindow {
     })
   }
   
+  static findButton(buttonName) {
+    return screen.getByRole('button', { name: buttonName })
+  }
 
-  static async startConversation() {
+  static async clickButton(buttonName) {
+    await fireEvent.click(this.findButton(buttonName))
+  }
+
+  static startConversation() {
     const button = screen.getByRole('button', { name: constants.startConversationLabel })
-    await fireEvent.click(button)
+    fireEvent.click(button)
   }
 
   static openWidget() {

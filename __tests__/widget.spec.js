@@ -34,9 +34,11 @@ describe('Widget Positive cases', () => {
   test('several steps', async () => {
     WidgetWindow.renderWidget(steps)
     WidgetWindow.openWidget()
-    await WidgetWindow.startConversation()
-    //WidgetWindow.startConversation()
+    await WidgetWindow.clickButton('Начать разговор')
+    //await WidgetWindow.startConversation()
     debug()
+    //WidgetWindow.startConversation()
+    
     //await new Promise(resolve => setTimeout(resolve, 1000));
     
     /*await WidgetWindow.waitForParagraph()
