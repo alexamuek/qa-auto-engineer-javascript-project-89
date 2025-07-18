@@ -2,7 +2,7 @@ export const startButtonText = 'Открыть Чат'
 export const modalTitleText = 'Виртуальный помощник'
 export const closeButtonLabel = 'Close'
 export const backButtonLabel = 'Назад'
-export const submitButtonName = 'Зарегистрироваться'
+export const submitButtonLabel = 'Зарегистрироваться'
 export const country = 'Россия'
 export const labelsAndValues = [
   {
