@@ -2,9 +2,7 @@ import { cleanup } from '@testing-library/react'
 import { test, vi, beforeEach, afterEach, describe, expect } from 'vitest'
 import { WidgetWindow } from './pages/WidgetWindow.js'
 import steps from '../__fixtures__/steps'
-import { modalTitleText } from './utils/constants'
 import ErrorsSteps from '../__fixtures__/errorsSteps.js'
-import { debug } from 'vitest-preview'
 
 const scrollIntoViewMock = vi.fn()
 
@@ -17,92 +15,79 @@ afterEach(() => {
 })
 
 describe('Widget Positive cases', () => {
-  test('initialize', () => {
+  test('init state', () => {
     WidgetWindow.renderWidget(steps)
-    expect(WidgetWindow.startButton).toBeVisible()
+    WidgetWindow.checkStartButtonVisibility()
   })
 
   test('open and close widget', async () => {
     WidgetWindow.renderWidget(steps)
     WidgetWindow.openWidget()
-    WidgetWindow.waitForStartContent()
+    WidgetWindow.expectModalTitle()
+    WidgetWindow.checkDialogVisibility()
+    WidgetWindow.waitForWelcomeContent()
     WidgetWindow.closeWidget()
     await WidgetWindow.waitForModalToClose()
-    WidgetWindow.notFoundWelcomeStepContent()
+    await WidgetWindow.waitForWelcomeTextHidden()
   })
 
   test('several steps', async () => {
     WidgetWindow.renderWidget(steps)
     WidgetWindow.openWidget()
-    await WidgetWindow.clickButton('Начать разговор')
-    //await WidgetWindow.startConversation()
-    debug()
-    //WidgetWindow.startConversation()
-    
-    //await new Promise(resolve => setTimeout(resolve, 1000));
-    
-    /*await WidgetWindow.waitForParagraph()
+    WidgetWindow.startConversation()
+    WidgetWindow.expectTextInsteadOfButton()
+    WidgetWindow.waitForStartContent()
     const scrollCount = scrollIntoViewMock.mock.calls.length
-    WidgetWindow.wantToAdvanced()
+    WidgetWindow.wantToAdvancedClick()
     expect(scrollIntoViewMock.mock.calls.length).toBe(scrollCount + 1)
-    WidgetWindow.waitForAdvancedStepContent()*/
+    WidgetWindow.waitForAdvancedContent()
   })
 
-  /*test('scroll', async () => {
+  test('scroll', async () => {
     WidgetWindow.renderWidget(steps)
     WidgetWindow.openWidget()
-    debug()
-    //WidgetWindow.startConversation()
-    //WidgetWindow.wantToAdvanced()
-
-    /*const div1 = WidgetWindow.getModalTitleEl()
+    WidgetWindow.startConversation()
+    WidgetWindow.wantToAdvancedClick()
+    const div1 = WidgetWindow.modalTitle
     const div2 = div1.parentElement
     const modalBody = div2.nextElementSibling
     const targetValue = 100
     WidgetWindow.scroll(modalBody, targetValue)
-    expect(modalBody.scrollTop).toBe(targetValue)
-  })*/
+    expect(modalBody.scrollTop).toBe(100)
+  })
 
-  /*test('focus on button', async () => {
+  test('focus on button', async () => {
     WidgetWindow.renderWidget(steps)
     WidgetWindow.openWidget()
-    const [welcomeStep] = steps.filter(item => item.id == 'welcome')
-    const startButton = WidgetWindow.findButton(welcomeStep.buttons[0].text)
+    const startButton = WidgetWindow.startButton
     expect(startButton.tagName).toBe('BUTTON')
     const mockHover = vi.fn()
     startButton.onmouseenter = mockHover
     await WidgetWindow.hover(startButton)
     expect(mockHover).toHaveBeenCalledTimes(1)
-  })*/
+  })
 })
 
-/*describe('Widget Negative cases', async () => {
+describe('Widget Negative cases', async () => {
   test('no message, no button property', async () => {
     const errorSteps = ErrorsSteps.no_message_and_buttons
     WidgetWindow.renderWidget(errorSteps)
     WidgetWindow.openWidget()
-    const [welcomeStep] = errorSteps.filter(item => item.id == 'welcome')
-    const dialog = WidgetWindow.dialog()
-    WidgetWindow.checkVisible(dialog)
-    welcomeStep.buttons[0].text
+    WidgetWindow.checkDialogVisibility()
     await expect(
-      WidgetWindow.clickButton(welcomeStep.buttons[0].text),
+      WidgetWindow.clickButton(WidgetWindow.startConversationButton),
     )
       .rejects
       .toThrow()
   })
 
   test('empty message array, empty button array', async () => {
-    // init - start
     const errorSteps = ErrorsSteps.empty_message_and_button_array
     WidgetWindow.renderWidget(errorSteps)
     WidgetWindow.openWidget()
-    const dialog = WidgetWindow.dialog()
-    WidgetWindow.checkVisible(dialog)
+    WidgetWindow.startConversation()
+    WidgetWindow.expectTextInsteadOfButton()
     const [welcomeStep] = errorSteps.filter(item => item.id == 'welcome')
-    await WidgetWindow.clickButton(welcomeStep.buttons[0].text)
-    const paragraph = WidgetWindow.findElByText(welcomeStep.buttons[0].text)
-    expect(paragraph.tagName).toBe('P')
     const [startStep] = errorSteps.filter(item => item.id == welcomeStep.buttons[0].nextStepId)
     WidgetWindow.waitForMessagesOfStep(startStep)
   })
@@ -111,24 +96,19 @@ describe('Widget Positive cases', () => {
     const errorSteps = ErrorsSteps.non_existed_step
     WidgetWindow.renderWidget(errorSteps)
     WidgetWindow.openWidget()
-    const dialog = WidgetWindow.dialog()
-    WidgetWindow.checkVisible(dialog)
-    const [welcomeStep] = errorSteps.filter(item => item.id == 'welcome')
-    await WidgetWindow.clickButton(welcomeStep.buttons[0].text)
-    const startButtonAgain = WidgetWindow.findButton(welcomeStep.buttons[0].text)
-    expect(startButtonAgain).toBeVisible()
-    expect(startButtonAgain).toBeInTheDocument()
-    expect(startButtonAgain).not.toHaveStyle({ display: 'none' })
+    WidgetWindow.checkDialogVisibility()
+    await WidgetWindow.clickButton(WidgetWindow.startConversationButton)
+    const startButtonAgain = WidgetWindow.startConversationButton
+    WidgetWindow.checkVisible(startButtonAgain)
   })
 
   test('nextStepId links to itself', async () => {
     const errorSteps = ErrorsSteps.self_linking
     WidgetWindow.renderWidget(errorSteps)
     WidgetWindow.openWidget()
-    const dialog = WidgetWindow.dialog()
-    WidgetWindow.checkVisible(dialog)
+    WidgetWindow.checkDialogVisibility()
     const [welcomeStep] = errorSteps.filter(item => item.id == 'welcome')
-    await WidgetWindow.clickButton(welcomeStep.buttons[0].text)
+    await WidgetWindow.clickButton(WidgetWindow.findButton(welcomeStep.buttons[0].text))
     const elements = WidgetWindow.findAllByText(welcomeStep.buttons[0].text)
     const validTags = ['P', 'BUTTON']
     elements.forEach((el) => {
@@ -143,8 +123,7 @@ describe('Widget Positive cases', () => {
     const errorSteps = ErrorsSteps.button_without_text_property
     WidgetWindow.renderWidget(errorSteps)
     WidgetWindow.openWidget()
-    const dialog = WidgetWindow.dialog()
-    WidgetWindow.checkVisible(dialog)
+    WidgetWindow.checkDialogVisibility()
     const welcomeButton = WidgetWindow.findButton('')
     WidgetWindow.checkVisible(welcomeButton)
     const [welcomeStep] = errorSteps.filter(item => item.id == 'welcome')
@@ -155,10 +134,9 @@ describe('Widget Positive cases', () => {
     const errorSteps = ErrorsSteps.button_without_nextStepId_property
     WidgetWindow.renderWidget(errorSteps)
     WidgetWindow.openWidget()
-    const dialog = WidgetWindow.dialog()
-    WidgetWindow.checkVisible(dialog)
+    WidgetWindow.checkDialogVisibility()
     const [welcomeStep] = errorSteps.filter(item => item.id == 'welcome')
-    await WidgetWindow.clickButton(welcomeStep.buttons[0].text)
+    await WidgetWindow.clickButton(WidgetWindow.startConversationButton)
     const elements = WidgetWindow.findAllByText(welcomeStep.buttons[0].text)
     const validTags = ['P', 'BUTTON']
     elements.forEach((el) => {
@@ -173,10 +151,9 @@ describe('Widget Positive cases', () => {
     const errorSteps = ErrorsSteps.button_without_type_property
     WidgetWindow.renderWidget(errorSteps)
     WidgetWindow.openWidget()
-    const dialog = WidgetWindow.dialog()
-    WidgetWindow.checkVisible(dialog)
+    WidgetWindow.checkDialogVisibility()
     const [welcomeStep] = errorSteps.filter(item => item.id == 'welcome')
-    await WidgetWindow.clickButton(welcomeStep.buttons[0].text)
+    await WidgetWindow.clickButton(WidgetWindow.startConversationButton)
     const [startStep] = errorSteps.filter(item => item.id == welcomeStep.buttons[0].nextStepId)
     WidgetWindow.waitForButtonsOfStep(startStep)
   })
@@ -185,10 +162,9 @@ describe('Widget Positive cases', () => {
     const errorSteps = ErrorsSteps.wrong_button_type
     WidgetWindow.renderWidget(errorSteps)
     WidgetWindow.openWidget()
-    const dialog = WidgetWindow.dialog()
-    WidgetWindow.checkVisible(dialog)
+    WidgetWindow.checkDialogVisibility()
     const [welcomeStep] = errorSteps.filter(item => item.id == 'welcome')
-    await WidgetWindow.clickButton(welcomeStep.buttons[0].text)
+    await WidgetWindow.clickButton(WidgetWindow.startConversationButton)
     const [startStep] = errorSteps.filter(item => item.id == welcomeStep.buttons[0].nextStepId)
     WidgetWindow.waitForButtonsOfStep(startStep)
   })
@@ -197,10 +173,9 @@ describe('Widget Positive cases', () => {
     const errorSteps = ErrorsSteps.next_step_without_id
     WidgetWindow.renderWidget(errorSteps)
     WidgetWindow.openWidget()
-    const dialog = WidgetWindow.dialog()
-    WidgetWindow.checkVisible(dialog)
+    WidgetWindow.checkDialogVisibility()
     const [welcomeStep] = errorSteps.filter(item => item.id == 'welcome')
-    await WidgetWindow.clickButton(welcomeStep.buttons[0].text)
+    await WidgetWindow.clickButton(WidgetWindow.startConversationButton)
     const elements = WidgetWindow.findAllByText(welcomeStep.buttons[0].text)
     const validTags = ['P', 'BUTTON']
     elements.forEach((el) => {
@@ -210,4 +185,4 @@ describe('Widget Positive cases', () => {
       )
     })
   })
-})*/
+})

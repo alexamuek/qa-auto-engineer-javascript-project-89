@@ -1,5 +1,5 @@
 import { cleanup } from '@testing-library/react'
-import { test, beforeEach, afterEach, vi } from 'vitest'
+import { test, describe, beforeEach, afterEach, vi } from 'vitest'
 import { AppPage } from './pages/App.jsx'
 // import { debug } from 'vitest-preview'
 
@@ -14,7 +14,6 @@ afterEach(() => {
   cleanup()
 })
 
-/* eslint-disable no-undef */
 describe('Integrate positive cases', () => {
   test('initialize app with widget', async () => {
     AppPage.waitForForm()
