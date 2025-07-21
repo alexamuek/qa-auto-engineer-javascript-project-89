@@ -3,6 +3,7 @@ import { test, vi, beforeEach, afterEach, describe, expect } from 'vitest'
 import { WidgetWindow } from './pages/WidgetWindow.js'
 import steps from '../__fixtures__/steps'
 import ErrorsSteps from '../__fixtures__/errorsSteps.js'
+import * as constants from './utils/constants'
 
 const scrollIntoViewMock = vi.fn()
 
@@ -87,8 +88,7 @@ describe('Widget Negative cases', async () => {
     WidgetWindow.openWidget()
     WidgetWindow.startConversation()
     WidgetWindow.expectTextInsteadOfButton()
-    const [welcomeStep] = errorSteps.filter(item => item.id == 'welcome')
-    const [startStep] = errorSteps.filter(item => item.id == welcomeStep.buttons[0].nextStepId)
+    const [startStep] = errorSteps.filter(item => item.id == constants.startStepId)
     WidgetWindow.waitForMessagesOfStep(startStep)
   })
 
@@ -107,9 +107,8 @@ describe('Widget Negative cases', async () => {
     WidgetWindow.renderWidget(errorSteps)
     WidgetWindow.openWidget()
     WidgetWindow.checkDialogVisibility()
-    const [welcomeStep] = errorSteps.filter(item => item.id == 'welcome')
-    await WidgetWindow.clickButton(WidgetWindow.findButton(welcomeStep.buttons[0].text))
-    const elements = WidgetWindow.findAllByText(welcomeStep.buttons[0].text)
+    await WidgetWindow.clickButton(WidgetWindow.findButton(constants.itselfStepId))
+    const elements = WidgetWindow.findAllByText(constants.startConversationLabel)
     const validTags = ['P', 'BUTTON']
     elements.forEach((el) => {
       WidgetWindow.checkVisible(el)
@@ -135,9 +134,8 @@ describe('Widget Negative cases', async () => {
     WidgetWindow.renderWidget(errorSteps)
     WidgetWindow.openWidget()
     WidgetWindow.checkDialogVisibility()
-    const [welcomeStep] = errorSteps.filter(item => item.id == 'welcome')
     await WidgetWindow.clickButton(WidgetWindow.startConversationButton)
-    const elements = WidgetWindow.findAllByText(welcomeStep.buttons[0].text)
+    const elements = WidgetWindow.findAllByText(constants.startConversationLabel)
     const validTags = ['P', 'BUTTON']
     elements.forEach((el) => {
       WidgetWindow.checkVisible(el)
@@ -152,9 +150,8 @@ describe('Widget Negative cases', async () => {
     WidgetWindow.renderWidget(errorSteps)
     WidgetWindow.openWidget()
     WidgetWindow.checkDialogVisibility()
-    const [welcomeStep] = errorSteps.filter(item => item.id == 'welcome')
     await WidgetWindow.clickButton(WidgetWindow.startConversationButton)
-    const [startStep] = errorSteps.filter(item => item.id == welcomeStep.buttons[0].nextStepId)
+    const [startStep] = errorSteps.filter(item => item.id == constants.startStepId)
     WidgetWindow.waitForButtonsOfStep(startStep)
   })
 
@@ -163,9 +160,8 @@ describe('Widget Negative cases', async () => {
     WidgetWindow.renderWidget(errorSteps)
     WidgetWindow.openWidget()
     WidgetWindow.checkDialogVisibility()
-    const [welcomeStep] = errorSteps.filter(item => item.id == 'welcome')
     await WidgetWindow.clickButton(WidgetWindow.startConversationButton)
-    const [startStep] = errorSteps.filter(item => item.id == welcomeStep.buttons[0].nextStepId)
+    const [startStep] = errorSteps.filter(item => item.id == constants.startStepId)
     WidgetWindow.waitForButtonsOfStep(startStep)
   })
 
@@ -174,9 +170,8 @@ describe('Widget Negative cases', async () => {
     WidgetWindow.renderWidget(errorSteps)
     WidgetWindow.openWidget()
     WidgetWindow.checkDialogVisibility()
-    const [welcomeStep] = errorSteps.filter(item => item.id == 'welcome')
     await WidgetWindow.clickButton(WidgetWindow.startConversationButton)
-    const elements = WidgetWindow.findAllByText(welcomeStep.buttons[0].text)
+    const elements = WidgetWindow.findAllByText(constants.startConversationLabel)
     const validTags = ['P', 'BUTTON']
     elements.forEach((el) => {
       WidgetWindow.checkVisible(el)

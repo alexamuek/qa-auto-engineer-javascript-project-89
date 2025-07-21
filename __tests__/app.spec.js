@@ -1,7 +1,6 @@
 import { cleanup } from '@testing-library/react'
 import { test, describe, beforeEach, afterEach, vi } from 'vitest'
 import { AppPage } from './pages/App.jsx'
-// import { debug } from 'vitest-preview'
 
 const scrollIntoViewMock = vi.fn()
 

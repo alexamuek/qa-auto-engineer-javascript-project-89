@@ -5,6 +5,8 @@ export const backButtonLabel = 'Назад'
 export const startConversationLabel = 'Начать разговор'
 export const advancedButtonLabel = 'Я разработчик, хочу углубить свои знания'
 export const submitButtonLabel = 'Зарегистрироваться'
+export const startStepId = 'start'
+export const itselfStepId = 'welcome again'
 export const country = 'Россия'
 export const labelsAndValues = [
   {
